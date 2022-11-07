@@ -1,0 +1,79 @@
+﻿<Window x:Class="MFDictionary.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:local="clr-namespace:MFDictionary"
+        xmlns:viewmodel="clr-namespace:MFDictionary.MVVM.ViewModel"
+        mc:Ignorable="d"
+        Title="AdvancedDictionary" Height="630" Width="1180"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Window.DataContext>
+        <viewmodel:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid Background="#9DE3FF">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="87*"/>
+            <RowDefinition Height="8*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="#52CEFF"
+                BorderBrush="Black" BorderThickness="1">
+            <StackPanel Grid.Row ="0" Orientation="Horizontal">
+                <RadioButton Content="DICTIONARY"
+                             Style="{StaticResource MenuButtonStyle}"/>
+                <RadioButton Content="TEST"
+                             Style="{StaticResource MenuButtonStyle}"/>
+            </StackPanel>
+        </Border>
+
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding WordsList}"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <RadioButton x:Name="Menu" GroupName="MainMenu"
+                                     Content="{Binding MenuItemText}"
+                                     Style="{StaticResource MenuButtonStyle}"
+                                     Command="{Binding MenuSelectionCommand}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Border Grid.Row="2" 
+                BorderBrush="Black" BorderThickness="1">
+            <StackPanel Orientation="Horizontal">
+                <TextBox Width="400" Margin="5"
+                         Text="{Binding SearchWord, UpdateSourceTrigger=LostFocus}"
+                         Style="{StaticResource SearchTextBox}"/>
+                <ComboBox FontFamily="Agency FB" FontSize="20" 
+                          Width="60" Height="30" Margin="5"
+                          VerticalAlignment="Center" HorizontalAlignment="Center"
+                          ItemsSource="{Binding LangsFrom}" SelectedValue="{Binding LangFrom, UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding LangFromChangedCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
+                
+                <Image Source="Icons/arrow_icon.png" Width="100"/>
+
+                <ComboBox FontFamily="Agency FB" FontSize="20" 
+                          Width="60" Height="30" Margin="5"
+                          VerticalAlignment="Center" HorizontalAlignment="Center"
+                          ItemsSource="{Binding LangsTo}" SelectedValue="{Binding LangTo, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Button Content="FIND" FontFamily="Agency FB" FontSize="30" 
+                        Width="200" Margin="300 5"
+                        VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Background="LightGreen"
+                        Command="{Binding FindWordCommand}"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

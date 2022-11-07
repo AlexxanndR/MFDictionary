@@ -1,0 +1,16 @@
+﻿<Application x:Class="MFDictionary.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:MFDictionary"
+             xmlns:viewModel="clr-namespace:MFDictionary.MVVM.ViewModel"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Templates/ListBoxStyle.xaml"/>
+                <ResourceDictionary Source="/Templates/ButtonStyle.xaml"/>
+                <ResourceDictionary Source="/Templates/TextBoxStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
