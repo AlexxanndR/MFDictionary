@@ -13,67 +13,27 @@
         <viewmodel:MainViewModel/>
     </Window.DataContext>
 
-    <Grid Background="#9DE3FF">
+    <Grid Background="#C8FFED">
         <Grid.RowDefinitions>
             <RowDefinition Height="5*"/>
-            <RowDefinition Height="87*"/>
-            <RowDefinition Height="8*"/>
+            <RowDefinition Height="95*"/>
         </Grid.RowDefinitions>
 
-        <Border Grid.Row="0" Background="#52CEFF"
-                BorderBrush="Black" BorderThickness="1">
+        <Frame x:Name="MainWindowFrame" 
+               Grid.Row = "1"
+               Margin="0"
+               NavigationUIVisibility="Hidden"/>
+
+        <Border Grid.Row="0" Background="#8AFFD9">
             <StackPanel Grid.Row ="0" Orientation="Horizontal">
-                <RadioButton Content="DICTIONARY"
-                             Style="{StaticResource MenuButtonStyle}"/>
-                <RadioButton Content="TEST"
-                             Style="{StaticResource MenuButtonStyle}"/>
+                <RadioButton x:Name="Dictionary" Content="DICTIONARY"
+                             Style="{StaticResource MenuButtonStyle}"
+                             Command="{Binding MenuSelectionCommand}" CommandParameter="Dictionary"/>
+                <RadioButton x:Name="Test" Content="TEST"
+                             Style="{StaticResource MenuButtonStyle}"
+                             Command="{Binding MenuSelectionCommand}" CommandParameter="Test"/>
             </StackPanel>
         </Border>
 
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding WordsList}"
-                      ScrollViewer.VerticalScrollBarVisibility="Auto">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <RadioButton x:Name="Menu" GroupName="MainMenu"
-                                     Content="{Binding MenuItemText}"
-                                     Style="{StaticResource MenuButtonStyle}"
-                                     Command="{Binding MenuSelectionCommand}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-
-        <Border Grid.Row="2" 
-                BorderBrush="Black" BorderThickness="1">
-            <StackPanel Orientation="Horizontal">
-                <TextBox Width="400" Margin="5"
-                         Text="{Binding SearchWord, UpdateSourceTrigger=LostFocus}"
-                         Style="{StaticResource SearchTextBox}"/>
-                <ComboBox FontFamily="Agency FB" FontSize="20" 
-                          Width="60" Height="30" Margin="5"
-                          VerticalAlignment="Center" HorizontalAlignment="Center"
-                          ItemsSource="{Binding LangsFrom}" SelectedValue="{Binding LangFrom, UpdateSourceTrigger=PropertyChanged}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding LangFromChangedCommand}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ComboBox>
-                
-                <Image Source="Icons/arrow_icon.png" Width="100"/>
-
-                <ComboBox FontFamily="Agency FB" FontSize="20" 
-                          Width="60" Height="30" Margin="5"
-                          VerticalAlignment="Center" HorizontalAlignment="Center"
-                          ItemsSource="{Binding LangsTo}" SelectedValue="{Binding LangTo, UpdateSourceTrigger=PropertyChanged}"/>
-
-                <Button Content="FIND" FontFamily="Agency FB" FontSize="30" 
-                        Width="200" Margin="300 5"
-                        VerticalAlignment="Center" HorizontalAlignment="Center"
-                        Background="LightGreen"
-                        Command="{Binding FindWordCommand}"/>
-            </StackPanel>
-        </Border>
     </Grid>
 </Window>

@@ -11,14 +11,14 @@
                             <TextBox x:Name="SearchBox" Margin="1" Padding="5"
                                      Text="{TemplateBinding Text}"
                                      BorderThickness="0"
-                                     FontSize="20" FontFamily="Agency FB"
+                                     FontSize="20" FontFamily="Oswald Medium"
                                      Background="Transparent" Foreground="Black"
                                      VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
                             <TextBlock Text= "Write a word..."
                                        IsHitTestVisible="False"
                                        VerticalAlignment="Center" HorizontalAlignment="Left"
                                        Margin="10 0 0 0"
-                                       FontSize ="20" FontFamily="Agency FB"
+                                       FontSize ="20" FontFamily="Oswald Medium"
                                        Foreground="Black">
                                 <TextBlock.Style>
                                     <Style TargetType="{x:Type TextBlock}">

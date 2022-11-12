@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace MFDictionary.MVVM.Model
 {
-    internal class Word
+    internal class TranslateDirection
     {
-        public string head { get; set; }
-        public Dictionary<string, Dictionary<string,string>> def { get; set; }
+        public string LangFrom { get; set; }
+        public string LangTo { get; set; }
     }
 }

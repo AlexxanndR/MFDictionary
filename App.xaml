@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:MFDictionary"
              xmlns:viewModel="clr-namespace:MFDictionary.MVVM.ViewModel"
+             xmlns:view="clr-namespace:MFDictionary.MVVM.View"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -11,6 +12,10 @@
                 <ResourceDictionary Source="/Templates/ButtonStyle.xaml"/>
                 <ResourceDictionary Source="/Templates/TextBoxStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type viewModel:DictionaryViewModel}">
+                <view:DictionaryView/>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

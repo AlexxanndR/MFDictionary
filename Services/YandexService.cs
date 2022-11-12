@@ -1,4 +1,5 @@
 ﻿using MFDictionary.MVVM.Model;
+using MFDictionary.Services;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,20 +10,20 @@ using System.Threading.Tasks;
 
 namespace MFDictionary.Core
 {
-    internal class DictionaryAPI
+    internal class YandexService
+
     {
-        private static readonly string key = "dict.1.1.20221106T112155Z.dbaab137810c5440.98aa89155ad9b46e203069e3dccf6834074af6e8";
-        private static readonly string endpoint = "https://dictionary.yandex.net/api/v1/dicservice.json";
+        private const string key = "dict.1.1.20221106T112155Z.dbaab137810c5440.98aa89155ad9b46e203069e3dccf6834074af6e8";
+        private const string endpoint = "https://dictionary.yandex.net/api/v1/dicservice.json";
 
-        public DictionaryAPI()
+        public YandexService()
         {
-
         }
 
-        public async Task<List<string>> GetLangs()
+        public async Task<List<string>> GetLangsAsync()
         {
             string route = String.Format("/getLangs?key={0}", key);
-            string result;
+            string result = null;
 
             using (var client = new HttpClient())
             using (var request = new HttpRequestMessage())
@@ -36,10 +37,11 @@ namespace MFDictionary.Core
 
             return JsonConvert.DeserializeObject<List<string>>(result);
         }
-        public async Task<Object> Request(string word)
-        { 
-            string route = String.Format("/lookup?key={0}&lang=ru-en&text={1}", key, word);
-            string result;
+
+        public async Task<YandexAnswer> LookupAsync(string word, string langFrom, string langTo)
+        {
+            YandexAnswer answer = new YandexAnswer();
+            string route = String.Format("/lookup?key={0}&lang={1}-{2}&text={3}", key, langFrom, langTo, word);
 
             using (var client = new HttpClient())
             using (var request = new HttpRequestMessage())
@@ -48,10 +50,21 @@ namespace MFDictionary.Core
                 request.RequestUri = new Uri(endpoint + route);
 
                 HttpResponseMessage response = await client.SendAsync(request).ConfigureAwait(false);
-                result = await response.Content.ReadAsStringAsync();   
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    answer.DictionaryAnswer = JsonConvert.DeserializeObject<YandexDictionary>(result);
+
+                } else
+                {
+                    answer.Text = response.ReasonPhrase;
+                }
+
+                answer.Code = response.StatusCode.ToString();
             }
 
-            return JsonConvert.DeserializeObject(result);
+            return answer;
         }
     }
 }
