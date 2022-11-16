@@ -72,7 +72,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MVVM\Model\TranslateDirection.cs" />
+    <Compile Include="Helpers\Mapper.cs" />
+    <Compile Include="MVVM\Model\Word.cs" />
     <Compile Include="MVVM\ViewModel\DictionaryViewModel.cs" />
     <Compile Include="MVVM\View\DictionaryView.xaml.cs">
       <DependentUpon>DictionaryView.xaml</DependentUpon>
@@ -93,7 +94,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Templates\ListBoxStyle.xaml">
+    <Page Include="Templates\ListBoxItemStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

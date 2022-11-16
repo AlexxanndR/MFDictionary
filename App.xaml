@@ -8,7 +8,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Templates/ListBoxStyle.xaml"/>
+                <ResourceDictionary Source="/Templates/ListBoxItemStyle.xaml"/>
                 <ResourceDictionary Source="/Templates/ButtonStyle.xaml"/>
                 <ResourceDictionary Source="/Templates/TextBoxStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>

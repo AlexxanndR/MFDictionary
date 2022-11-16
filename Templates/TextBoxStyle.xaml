@@ -9,7 +9,7 @@
                         <Grid>
                             <Rectangle Stroke="Black" StrokeThickness="1"/>
                             <TextBox x:Name="SearchBox" Margin="1" Padding="5"
-                                     Text="{TemplateBinding Text}"
+                                     Text="{Binding Path=Text, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                      BorderThickness="0"
                                      FontSize="20" FontFamily="Oswald Medium"
                                      Background="Transparent" Foreground="Black"

@@ -1,6 +1,9 @@
 ﻿using MFDictionary.Core;
+using MFDictionary.Helpers;
+using MFDictionary.MVVM.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,11 +12,9 @@ namespace MFDictionary.MVVM.ViewModel
 {
     internal class DictionaryViewModel : ObservableObject
     {
-        YandexService yandexService;
+        YandexService _yandexService;
 
-        private Dictionary<string, List<string>> langsRatio;
-
-        private Dictionary<string, string> langsShortForm = new Dictionary<string, string>()
+        private Dictionary<string, string> _langsShortForm = new Dictionary<string, string>()
         {
             { "ru", "Russian" },
             { "en", "English" },
@@ -44,6 +45,10 @@ namespace MFDictionary.MVVM.ViewModel
             { "tt", "Tatar" },
             { "zh", "Chinese" },
         };
+
+        private Dictionary<string, List<string>> _langsRatio;
+
+        public ObservableCollection<Word> WordsList { get; }
 
         private List<string> _langsFrom;
 
@@ -107,29 +112,30 @@ namespace MFDictionary.MVVM.ViewModel
 
         private async Task Init()
         {
-            var langs = await yandexService.GetLangsAsync();
+            var langs = await _yandexService.GetLangsAsync();
 
             foreach (var lan in langs)
             {
-                var from = langsShortForm[lan.Split('-')[0]];
-                var to = langsShortForm[lan.Split('-')[1]];
+                var from = _langsShortForm[lan.Split('-')[0]];
+                var to = _langsShortForm[lan.Split('-')[1]];
 
-                if (langsRatio.ContainsKey(from) == true)
-                    langsRatio[from].Add(to);
+                if (_langsRatio.ContainsKey(from) == true)
+                    _langsRatio[from].Add(to);
                 else
                 {
                     LangsFrom.Add(from);
-                    langsRatio.Add(from, new List<string> { to });
+                    _langsRatio.Add(from, new List<string> { to });
                 }
             }
         }
 
         public DictionaryViewModel()
         {
-            yandexService = new YandexService();
-            langsRatio = new Dictionary<string, List<string>>();
-            LangsFrom = new List<string>();
-            LangsTo = new List<string>();
+            _yandexService = new YandexService();
+            _langsRatio = new Dictionary<string, List<string>>();
+            _langsFrom = new List<string>();
+            _langsTo = new List<string>();
+            WordsList = new ObservableCollection<Word>();
         }
 
         public RelayCommand WindowLoadedCommand
@@ -149,7 +155,8 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 return new RelayCommand((change) =>
                 {
-                    LangsTo = langsRatio[LangFrom];
+                    if (LangFrom != null)
+                        LangsTo = _langsRatio[LangFrom];
                 });
             }
         }
@@ -160,13 +167,14 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 return new RelayCommand(async (action) =>
                 {
-                    var langFrom = langsShortForm.FirstOrDefault(x => x.Value == LangFrom).Key;
-                    var langTo   = langsShortForm.FirstOrDefault(x => x.Value == LangTo).Key;
+                    var langFrom = _langsShortForm.FirstOrDefault(x => x.Value == LangFrom).Key;
+                    var langTo   = _langsShortForm.FirstOrDefault(x => x.Value == LangTo).Key;
 
+                    var wordInfo = await _yandexService.LookupAsync(SearchWord, langFrom, langTo);
 
-                    var wordInfo = await yandexService.LookupAsync(SearchWord, langFrom, langTo);
-
-
+                    WordsList.Add(wordInfo.DictionaryAnswer.GetWord());
+                   
+                    OnPropertyChanged();
                 });
             }
         }

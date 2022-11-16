@@ -24,19 +24,12 @@
             <RowDefinition Height="8*"/>
         </Grid.RowDefinitions>
 
-        <ItemsControl Grid.Row="0" ItemsSource="{Binding WordsList}"
-                      ScrollViewer.VerticalScrollBarVisibility="Auto">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <RadioButton x:Name="Menu" GroupName="MainMenu"
-                                     Content="{Binding MenuItemText}"
-                                     Style="{StaticResource MenuButtonStyle}"
-                                     Command="{Binding MenuSelectionCommand}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <ScrollViewer Grid.Row="0"
+                      VerticalScrollBarVisibility="Auto">
+            <ListBox ItemsSource="{Binding WordsList}"
+                     Background="Transparent"
+                     ItemContainerStyle="{StaticResource WordsListBoxItem}"/>
+        </ScrollViewer>
 
         <Border Grid.Row="1" 
                 Background="#8AFFD9">
@@ -47,6 +40,7 @@
                 <ComboBox FontFamily="Agency FB" FontSize="20" 
                           Width="100" Height="30" Margin="20 0 10 0"
                           VerticalAlignment="Center" HorizontalAlignment="Center"
+                          IsEditable="true"
                           ItemsSource="{Binding LangsFrom}" SelectedValue="{Binding LangFrom, UpdateSourceTrigger=PropertyChanged}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">
@@ -60,6 +54,7 @@
                 <ComboBox FontFamily="Agency FB" FontSize="20" 
                           Width="100" Height="30" Margin="20 0 10 0"
                           VerticalAlignment="Center" HorizontalAlignment="Center"
+                          IsEditable="true"
                           ItemsSource="{Binding LangsTo}" SelectedValue="{Binding LangTo, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <Button Content="FIND" FontFamily="Agency FB" FontSize="30" 
