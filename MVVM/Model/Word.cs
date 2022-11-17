@@ -8,14 +8,16 @@ namespace MFDictionary.MVVM.Model
 {
     internal class Word
     {
+        public long Id { get; set; }
+
         public string Text { get; set; }
 
         public string Translation { get; set; }
 
-        public string Ex1 { get; set; }
+        public string Example1 { get; set; }
 
-        public string Ex2 { get; set; }
+        public string Example2 { get; set; }
 
-        public string Ex3 { get; set; }
+        public string Example3 { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MFDictionary.MVVM.ViewModel
 {
@@ -167,6 +168,15 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 return new RelayCommand(async (action) =>
                 {
+                    MessageBoxResult messageBoxResult = MessageBoxResult.None;
+
+                    if (LangFrom == null || LangTo == null)
+                        messageBoxResult = MessageBox.Show("Translation direction not selected!", "Warning", MessageBoxButton.OK,
+                                                           MessageBoxImage.Warning, MessageBoxResult.OK, MessageBoxOptions.None);
+
+                    if (messageBoxResult == MessageBoxResult.OK)
+                        return;
+
                     var langFrom = _langsShortForm.FirstOrDefault(x => x.Value == LangFrom).Key;
                     var langTo   = _langsShortForm.FirstOrDefault(x => x.Value == LangTo).Key;
 
@@ -174,7 +184,6 @@ namespace MFDictionary.MVVM.ViewModel
 
                     WordsList.Add(wordInfo.DictionaryAnswer.GetWord());
                    
-                    OnPropertyChanged();
                 });
             }
         }

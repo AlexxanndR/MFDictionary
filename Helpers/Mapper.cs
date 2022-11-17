@@ -15,9 +15,9 @@ namespace MFDictionary.Helpers
             {
                 Text = yandexDictionary.def.First().text,
                 Translation = yandexDictionary.def.First().tr.First().text,
-                Ex1 = yandexDictionary.def.First().tr.First().ex.ElementAtOrDefault(0)?.text,
-                Ex2 = yandexDictionary.def.First().tr.First().ex.ElementAtOrDefault(1)?.text,
-                Ex3 = yandexDictionary.def.First().tr.First().ex.ElementAtOrDefault(2)?.text
+                Example1 = yandexDictionary.def.First().tr.First().ex.ElementAtOrDefault(0)?.text,
+                Example2 = yandexDictionary.def.First().tr.First().ex.ElementAtOrDefault(1)?.text,
+                Example3 = yandexDictionary.def.First().tr.First().ex.ElementAtOrDefault(2)?.text
             };
         }
     }
