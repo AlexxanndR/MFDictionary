@@ -45,6 +45,7 @@
       <HintPath>packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -79,6 +80,7 @@
       <DependentUpon>DictionaryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\Model\YandexAnswer.cs" />
+    <Compile Include="Services\WordsDbAdapter.cs" />
     <Compile Include="Services\YandexService.cs" />
     <Compile Include="Core\ObservableObject.cs" />
     <Compile Include="Core\RelayCommand.cs" />

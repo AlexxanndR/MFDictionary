@@ -1,9 +1,11 @@
 ﻿using MFDictionary.Core;
 using MFDictionary.Helpers;
 using MFDictionary.MVVM.Model;
+using MFDictionary.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +16,8 @@ namespace MFDictionary.MVVM.ViewModel
     internal class DictionaryViewModel : ObservableObject
     {
         YandexService _yandexService;
+
+        WordsDbAdapter _wordsDbAdapter;
 
         private Dictionary<string, string> _langsShortForm = new Dictionary<string, string>()
         {
@@ -49,7 +53,16 @@ namespace MFDictionary.MVVM.ViewModel
 
         private Dictionary<string, List<string>> _langsRatio;
 
-        public ObservableCollection<Word> WordsList { get; }
+        private ObservableCollection<Word> _wordsList;
+        public ObservableCollection<Word> WordsList
+        {
+            get { return _wordsList; } 
+            set
+            {
+                _wordsList = value;
+                OnPropertyChanged();
+            }
+        }
 
         private List<string> _langsFrom;
 
@@ -111,14 +124,26 @@ namespace MFDictionary.MVVM.ViewModel
             }
         }
 
+        public DictionaryViewModel()
+        {
+            _yandexService = new YandexService();
+            _wordsDbAdapter = new WordsDbAdapter();
+            _langsRatio = new Dictionary<string, List<string>>();
+            _langsFrom = new List<string>();
+            _langsTo = new List<string>();
+            _wordsList = new ObservableCollection<Word>();
+        }
+
         private async Task Init()
         {
+            WordsList = _wordsDbAdapter.GetAll();
+
             var langs = await _yandexService.GetLangsAsync();
 
-            foreach (var lan in langs)
+            foreach (var lang in langs)
             {
-                var from = _langsShortForm[lan.Split('-')[0]];
-                var to = _langsShortForm[lan.Split('-')[1]];
+                var from = _langsShortForm[lang.Split('-')[0]];
+                var to = _langsShortForm[lang.Split('-')[1]];
 
                 if (_langsRatio.ContainsKey(from) == true)
                     _langsRatio[from].Add(to);
@@ -130,22 +155,21 @@ namespace MFDictionary.MVVM.ViewModel
             }
         }
 
-        public DictionaryViewModel()
-        {
-            _yandexService = new YandexService();
-            _langsRatio = new Dictionary<string, List<string>>();
-            _langsFrom = new List<string>();
-            _langsTo = new List<string>();
-            WordsList = new ObservableCollection<Word>();
-        }
-
         public RelayCommand WindowLoadedCommand
         {
             get
             {
                 return new RelayCommand(async (loaded) =>
                 {
-                    await Init();
+                    try
+                    {
+                        await Init();
+                    } 
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Oops! No internet connection.", "Warning", MessageBoxButton.OK, 
+                                        MessageBoxImage.Warning, MessageBoxResult.OK, MessageBoxOptions.None);
+                    }
                 });
             }
         }
@@ -182,8 +206,9 @@ namespace MFDictionary.MVVM.ViewModel
 
                     var wordInfo = await _yandexService.LookupAsync(SearchWord, langFrom, langTo);
 
-                    WordsList.Add(wordInfo.DictionaryAnswer.GetWord());
-                   
+                    Word word = wordInfo.DictionaryAnswer.GetWord();
+                    WordsList.Add(word);
+                    _wordsDbAdapter.Insert(word);        
                 });
             }
         }
