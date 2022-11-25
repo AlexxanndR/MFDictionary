@@ -24,9 +24,9 @@ namespace MFDictionary.MVVM.ViewModel
         {
             get
             {
-                return new RelayCommand((click) =>
+                return new RelayCommand((pageName) =>
                 {
-                    NavigateToPage(click as string);
+                    NavigateToPage(pageName as string);
                 });
             }
         }

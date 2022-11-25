@@ -40,7 +40,8 @@
                             </Grid>
 
                             <Button Grid.RowSpan="2" Grid.Column="1"
-                                    BorderThickness="1 0" Cursor="Hand">
+                                    BorderThickness="1 0" Cursor="Hand"
+                                    Command="{Binding DeleteWordCommand}" CommandParameter="{Binding Id}">
                                 <Image HorizontalAlignment="Right"
                                        Source="../Icons/delete_icon.png"/>
                             </Button>
@@ -52,19 +53,34 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-
-                                <Border Grid.Column="1"
-                                        BorderBrush="Black" BorderThickness="1 0 1 0"/>
-
                                 <TextBlock Grid.Column="0" Text="{Binding Example1}"
                                            FontSize="25" FontFamily="Oswald" FontWeight="Light"
                                            Margin="0 0 5 0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                <TextBlock Grid.Column="1" Text="{Binding Example2}"
+                                <TextBlock Grid.Column="1" x:Name="CenterExample" Text="{Binding Example2}"
                                            FontSize="25" FontFamily="Oswald" FontWeight="Light"
                                            Margin="5 0 5 0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                <TextBlock Grid.Column="2" Text="{Binding Example3}"
+                                <TextBlock Grid.Column="2" x:Name="LastExample" Text="{Binding Example3}"
                                            FontSize="25" FontFamily="Oswald" FontWeight="Light"
                                            Margin="5 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+
+                                <Border Grid.Column="1"
+                                        BorderBrush="Black">
+                                    <Border.Style>
+                                        <Style TargetType="{x:Type Border}">
+                                            <Setter Property="BorderThickness" Value="1 0 1 0"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=CenterExample, Path=Text}" Value="">
+                                                    <Setter Property="BorderThickness" Value="0"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ElementName=LastExample, Path=Text}" Value="">
+                                                    <Setter Property="BorderThickness" Value="1 0 0 0"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                </Border>
+                                
                             </Grid>
                         </Grid>
                     </Border>

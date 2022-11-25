@@ -213,6 +213,16 @@ namespace MFDictionary.MVVM.ViewModel
             }
         }
 
+        public RelayCommand DeleteWordCommand
+        {
+            get
+            {
+                return new RelayCommand((wordId) =>
+                {
+                    _wordsDbAdapter.Delete(wordId as long);
+                });
+            }
+        }
 
     }
 }

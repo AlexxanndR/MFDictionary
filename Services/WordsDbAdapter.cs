@@ -70,5 +70,15 @@ namespace MFDictionary.Services
 
             _sqlConnection.Close();
         }
+
+        public void Delete(long id)
+        {
+            _sqlConnection.Open();
+
+            SqlCommand sqlCommand = new SqlCommand("DELETE FROM Words WHERE Id = " + id, _sqlConnection);
+            sqlCommand.ExecuteNonQuery();
+
+            _sqlConnection.Close();
+        }
     }
 }
