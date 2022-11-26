@@ -76,11 +76,15 @@
     <Compile Include="Helpers\Mapper.cs" />
     <Compile Include="MVVM\Model\Word.cs" />
     <Compile Include="MVVM\ViewModel\DictionaryViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\TestViewModel.cs" />
     <Compile Include="MVVM\View\DictionaryView.xaml.cs">
       <DependentUpon>DictionaryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\Model\YandexAnswer.cs" />
-    <Compile Include="Services\WordsDbAdapter.cs" />
+    <Compile Include="MVVM\View\TestView.xaml.cs">
+      <DependentUpon>TestView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\WordsDboAdapter.cs" />
     <Compile Include="Services\YandexService.cs" />
     <Compile Include="Core\ObservableObject.cs" />
     <Compile Include="Core\RelayCommand.cs" />
@@ -89,6 +93,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MVVM\View\DictionaryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\TestView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

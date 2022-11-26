@@ -17,7 +17,7 @@ namespace MFDictionary.MVVM.ViewModel
     {
         YandexService _yandexService;
 
-        WordsDbAdapter _wordsDbAdapter;
+        WordsDboAdapter _wordsDboAdapter;
 
         private Dictionary<string, string> _langsShortForm = new Dictionary<string, string>()
         {
@@ -127,7 +127,7 @@ namespace MFDictionary.MVVM.ViewModel
         public DictionaryViewModel()
         {
             _yandexService = new YandexService();
-            _wordsDbAdapter = new WordsDbAdapter();
+            _wordsDboAdapter = new WordsDboAdapter();
             _langsRatio = new Dictionary<string, List<string>>();
             _langsFrom = new List<string>();
             _langsTo = new List<string>();
@@ -136,7 +136,7 @@ namespace MFDictionary.MVVM.ViewModel
 
         private async Task Init()
         {
-            WordsList = _wordsDbAdapter.GetAll();
+            WordsList = _wordsDboAdapter.GetAll();
 
             var langs = await _yandexService.GetLangsAsync();
 
@@ -194,21 +194,44 @@ namespace MFDictionary.MVVM.ViewModel
                 {
                     MessageBoxResult messageBoxResult = MessageBoxResult.None;
 
+                    if (String.IsNullOrWhiteSpace(SearchWord))
+                    {
+                        messageBoxResult = MessageBox.Show("The search word is missing!", "Warning", MessageBoxButton.OK,
+                                                           MessageBoxImage.Warning, MessageBoxResult.OK, MessageBoxOptions.None);
+                        return;
+                    }
+
                     if (LangFrom == null || LangTo == null)
+                    {
                         messageBoxResult = MessageBox.Show("Translation direction not selected!", "Warning", MessageBoxButton.OK,
                                                            MessageBoxImage.Warning, MessageBoxResult.OK, MessageBoxOptions.None);
-
-                    if (messageBoxResult == MessageBoxResult.OK)
                         return;
+                    }
 
                     var langFrom = _langsShortForm.FirstOrDefault(x => x.Value == LangFrom).Key;
                     var langTo   = _langsShortForm.FirstOrDefault(x => x.Value == LangTo).Key;
 
                     var wordInfo = await _yandexService.LookupAsync(SearchWord, langFrom, langTo);
-
                     Word word = wordInfo.DictionaryAnswer.GetWord();
+
+                    if (word == null)
+                    {
+                        messageBoxResult = MessageBox.Show("The word '" + SearchWord + "' not found!", "Error",
+                                                           MessageBoxButton.OK, MessageBoxImage.Error,
+                                                           MessageBoxResult.OK, MessageBoxOptions.None);
+                        return;
+                    }
+
+                    if (WordsList.Any(x => x.Text == word.Text && x.Translation == word.Translation))
+                    {
+                        messageBoxResult = MessageBox.Show("The word '" + SearchWord + "' has already been added to the dictionary!", "Warning",
+                                                           MessageBoxButton.OK, MessageBoxImage.Warning,
+                                                           MessageBoxResult.OK, MessageBoxOptions.None);
+                        return;
+                    }
+
                     WordsList.Add(word);
-                    _wordsDbAdapter.Insert(word);        
+                    _wordsDboAdapter.Insert(word);        
                 });
             }
         }
@@ -219,7 +242,8 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 return new RelayCommand((wordId) =>
                 {
-                    _wordsDbAdapter.Delete(wordId as long);
+                    _wordsDboAdapter.Delete((long)wordId);
+                    WordsList.Remove(WordsList.Single(x => x.Id == (long)wordId));
                 });
             }
         }

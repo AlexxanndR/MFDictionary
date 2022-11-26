@@ -11,13 +11,16 @@ namespace MFDictionary.Helpers
     {
         public static Word GetWord(this YandexDictionary yandexDictionary)
         {
+            if (yandexDictionary.def.Length == 0)
+                return null;
+
             return new Word
             {
                 Text = yandexDictionary.def.First().text,
                 Translation = yandexDictionary.def.First().tr.First().text,
-                Example1 = yandexDictionary.def.First().tr.First().ex.ElementAtOrDefault(0)?.text,
-                Example2 = yandexDictionary.def.First().tr.First().ex.ElementAtOrDefault(1)?.text,
-                Example3 = yandexDictionary.def.First().tr.First().ex.ElementAtOrDefault(2)?.text
+                Example1 = yandexDictionary.def.First().tr.First().ex?.ElementAtOrDefault(0)?.text,
+                Example2 = yandexDictionary.def.First().tr.First().ex?.ElementAtOrDefault(1)?.text,
+                Example3 = yandexDictionary.def.First().tr.First().ex?.ElementAtOrDefault(2)?.text
             };
         }
     }

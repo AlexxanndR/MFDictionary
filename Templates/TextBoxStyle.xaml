@@ -18,7 +18,7 @@
                                        IsHitTestVisible="False"
                                        VerticalAlignment="Center" HorizontalAlignment="Left"
                                        Margin="10 0 0 0"
-                                       FontSize ="20" FontFamily="Oswald Medium"
+                                       FontSize ="20" FontFamily="Oswald" FontWeight="Light"
                                        Foreground="Black">
                                 <TextBlock.Style>
                                     <Style TargetType="{x:Type TextBlock}">
