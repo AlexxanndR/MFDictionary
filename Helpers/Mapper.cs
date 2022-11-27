@@ -23,5 +23,15 @@ namespace MFDictionary.Helpers
                 Example3 = yandexDictionary.def.First().tr.First().ex?.ElementAtOrDefault(2)?.text
             };
         }
+
+        public static TestWord GetTestWord(this Word word)
+        {
+            return new TestWord
+            {
+                Text = word.Text,
+                GivenTranslation = null,
+                Translation = word.Translation,
+            };
+        }
     }
 }

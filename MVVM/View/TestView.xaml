@@ -26,14 +26,14 @@
 
         <ScrollViewer Grid.Row="0"
                       VerticalScrollBarVisibility="Auto">
-            <ListBox ItemsSource="{Binding WordsList}"
+            <ListBox ItemsSource="{Binding TestWordsList}"
                      Background="Transparent"
                      ItemContainerStyle="{StaticResource WordsTestListBoxItem}"/>
         </ScrollViewer>
 
         <Border Grid.Row="1" 
                 Background="#8AFFD9">
-            <Button Content="GET RESULT" FontFamily="Agency FB" FontSize="30" 
+            <Button x:Name="ResultButton" Content="GET RESULT" FontFamily="Agency FB" FontSize="30" 
                     Width="200" Margin="200 5"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     Background="Transparent"

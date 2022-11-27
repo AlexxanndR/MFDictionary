@@ -1,4 +1,5 @@
 ﻿using MFDictionary.Core;
+using MFDictionary.Helpers;
 using MFDictionary.MVVM.Model;
 using MFDictionary.Services;
 using System;
@@ -15,13 +16,14 @@ namespace MFDictionary.MVVM.ViewModel
     {
         WordsDboAdapter _wordsDboAdapter;
 
-        private ObservableCollection<Word> _wordsList;
-        public ObservableCollection<Word> WordsList
+        private ObservableCollection<TestWord> _testWordsList;
+
+        public ObservableCollection<TestWord> TestWordsList
         {
-            get { return _wordsList; }
+            get { return _testWordsList; }
             set
             {
-                _wordsList = value;
+                _testWordsList = value;
                 OnPropertyChanged();
             }
         }
@@ -29,6 +31,7 @@ namespace MFDictionary.MVVM.ViewModel
         public TestViewModel()
         {
             _wordsDboAdapter = new WordsDboAdapter();
+            _testWordsList= new ObservableCollection<TestWord>();
         }
 
         private void Init()
@@ -45,7 +48,9 @@ namespace MFDictionary.MVVM.ViewModel
             if (messageBoxResult == MessageBoxResult.OK)
                 return;
 
-            WordsList = _wordsDboAdapter.GetRandomWords(10);
+            List<Word> words = _wordsDboAdapter.GetRandomWords(10);          
+            foreach (Word word in words)
+                TestWordsList.Add(word.GetTestWord());
         }
 
         public RelayCommand WindowLoadedCommand
@@ -58,6 +63,19 @@ namespace MFDictionary.MVVM.ViewModel
                 });
             }
         }
+
+        public RelayCommand GetResultCommand
+        {
+            get
+            {
+                return new RelayCommand((loaded) =>
+                {
+                    
+                });
+            }
+        }
+
+
 
     }
 }

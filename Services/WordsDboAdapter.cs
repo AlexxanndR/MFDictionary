@@ -91,11 +91,11 @@ namespace MFDictionary.Services
 
             return count; 
         }
-        public ObservableCollection<Word> GetRandomWords(int wordsNum)
+        public List<Word> GetRandomWords(int wordsNum)
         {
             _sqlConnection.Open();
 
-            ObservableCollection<Word> words = new ObservableCollection<Word>();
+            List<Word> words = new List<Word>();
 
             SqlCommand sqlCommand = new SqlCommand("SELECT TOP " + wordsNum + " * FROM Words ORDER BY NEWID()", _sqlConnection);
 

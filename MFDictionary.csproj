@@ -74,6 +74,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helpers\Mapper.cs" />
+    <Compile Include="MVVM\Model\TestWord.cs" />
     <Compile Include="MVVM\Model\Word.cs" />
     <Compile Include="MVVM\ViewModel\DictionaryViewModel.cs" />
     <Compile Include="MVVM\ViewModel\TestViewModel.cs" />
