@@ -28,10 +28,23 @@ namespace MFDictionary.MVVM.ViewModel
             }
         }
 
+        private bool _resultButtonPressed;
+
+        public bool ResultButtonPressed
+        {
+            get { return _resultButtonPressed; }
+            set
+            {
+                _resultButtonPressed = value;
+                OnPropertyChanged();
+            }
+        }
+
         public TestViewModel()
         {
             _wordsDboAdapter = new WordsDboAdapter();
             _testWordsList= new ObservableCollection<TestWord>();
+            ResultButtonPressed = false;
         }
 
         private void Init()
@@ -70,12 +83,36 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 return new RelayCommand((loaded) =>
                 {
-                    
+                    ResultButtonPressed = true;
+                    int correctAnswersNum = 0;
+
+                    if (TestWordsList.Count == 0)
+                    {
+                        MessageBox.Show("There are no words in test!", "Warning",
+                                        MessageBoxButton.OK, MessageBoxImage.Warning,
+                                        MessageBoxResult.OK, MessageBoxOptions.None);
+                        return;
+                    }
+
+                    foreach (TestWord word in TestWordsList)
+                    {
+                        if (word.GivenTranslation == word.Translation)
+                        {
+                            correctAnswersNum++;
+                            word.ResultColor = "Blue";
+                        } 
+                        else
+                            word.ResultColor = "Red";
+                    }
+
+                    float passPercent = ((float)correctAnswersNum / 10) * 100;
+
+                    MessageBox.Show(String.Format("You passed the test by {0:0.00}%", passPercent), "Information",
+                                    MessageBoxButton.OK, MessageBoxImage.Information,
+                                    MessageBoxResult.OK, MessageBoxOptions.None);
                 });
             }
         }
-
-
 
     }
 }

@@ -26,7 +26,7 @@
 
         <ScrollViewer Grid.Row="0"
                       VerticalScrollBarVisibility="Auto">
-            <ListBox ItemsSource="{Binding TestWordsList}"
+            <ListBox ItemsSource="{Binding TestWordsList, UpdateSourceTrigger=PropertyChanged}"
                      Background="Transparent"
                      ItemContainerStyle="{StaticResource WordsTestListBoxItem}"/>
         </ScrollViewer>
@@ -37,7 +37,7 @@
                     Width="200" Margin="200 5"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     Background="Transparent"
-                    Cursor="Hand" Command="{Binding GetResultCommand}"/>
+                    Cursor="Hand" Tag="{Binding ResultButtonPressed}" Command="{Binding GetResultCommand}"/>
         </Border>
     </Grid>
 </UserControl>

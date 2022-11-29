@@ -31,6 +31,7 @@ namespace MFDictionary.Helpers
                 Text = word.Text,
                 GivenTranslation = null,
                 Translation = word.Translation,
+                ResultColor = "Black"
             };
         }
     }

@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:MFDictionary"
         xmlns:viewmodel="clr-namespace:MFDictionary.MVVM.ViewModel"
         mc:Ignorable="d"
-        Title="AdvancedDictionary" Height="630" Width="1180"
+        Title="MFDictionary" Height="630" Width="1180"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.DataContext>
         <viewmodel:MainViewModel/>
