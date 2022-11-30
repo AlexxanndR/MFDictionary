@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MFDictionary.MVVM.Model
 {
-    internal class Word
+    public class Word
     {
         public long Id { get; set; }
 

@@ -10,8 +10,7 @@ using System.Threading.Tasks;
 
 namespace MFDictionary.Core
 {
-    internal class YandexService
-
+    public class YandexService
     {
         private const string key = "dict.1.1.20221106T112155Z.dbaab137810c5440.98aa89155ad9b46e203069e3dccf6834074af6e8";
         private const string endpoint = "https://dictionary.yandex.net/api/v1/dicservice.json";
@@ -55,11 +54,9 @@ namespace MFDictionary.Core
                 {
                     var result = await response.Content.ReadAsStringAsync();
                     answer.DictionaryAnswer = JsonConvert.DeserializeObject<YandexDictionary>(result);
-
-                } else
-                {
+                } 
+                else
                     answer.Text = response.ReasonPhrase;
-                }
 
                 answer.Code = response.StatusCode.ToString();
             }

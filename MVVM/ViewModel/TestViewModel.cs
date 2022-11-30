@@ -96,7 +96,7 @@ namespace MFDictionary.MVVM.ViewModel
 
                     foreach (TestWord word in TestWordsList)
                     {
-                        if (word.GivenTranslation == word.Translation)
+                        if (String.Equals(word.GivenTranslation, word.Translation, StringComparison.OrdinalIgnoreCase))
                         {
                             correctAnswersNum++;
                             word.ResultColor = "Blue";

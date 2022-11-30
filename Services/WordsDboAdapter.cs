@@ -36,8 +36,8 @@ namespace MFDictionary.Services
                 Word word = new Word();
 
                 word.Id = (long)reader["Id"];
-                word.Text = (string)reader["Text"];
-                word.Translation = (string)reader["Translation"];
+                word.Text = reader["Text"].ToString();
+                word.Translation = reader["Translation"].ToString();
                 word.Example1 = reader["Example1"]?.ToString() ?? String.Empty;
                 word.Example2 = reader["Example2"]?.ToString() ?? String.Empty;
                 word.Example3 = reader["Example3"]?.ToString() ?? String.Empty;
@@ -91,6 +91,7 @@ namespace MFDictionary.Services
 
             return count; 
         }
+
         public List<Word> GetRandomWords(int wordsNum)
         {
             _sqlConnection.Open();

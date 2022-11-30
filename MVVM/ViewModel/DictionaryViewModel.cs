@@ -216,7 +216,7 @@ namespace MFDictionary.MVVM.ViewModel
 
                     if (word == null)
                     {
-                        messageBoxResult = MessageBox.Show("The word '" + SearchWord + "' not found!", "Error",
+                        messageBoxResult = MessageBox.Show("Oopa! The word '" + SearchWord + "' not found! Spelling error or non-existent word.", "Error",
                                                            MessageBoxButton.OK, MessageBoxImage.Error,
                                                            MessageBoxResult.OK, MessageBoxOptions.None);
                         return;
@@ -224,11 +224,16 @@ namespace MFDictionary.MVVM.ViewModel
 
                     if (WordsList.Any(x => x.Text == word.Text && x.Translation == word.Translation))
                     {
-                        messageBoxResult = MessageBox.Show("The word '" + SearchWord + "' has already been added to the dictionary!", "Warning",
+                        messageBoxResult = MessageBox.Show("Oops! The word '" + SearchWord + "' has already been added to the dictionary!", "Warning",
                                                            MessageBoxButton.OK, MessageBoxImage.Warning,
                                                            MessageBoxResult.OK, MessageBoxOptions.None);
                         return;
                     }
+
+                    messageBoxResult = MessageBox.Show("Word '" + SearchWord + "' was successfully found!", "Information",
+                                                       MessageBoxButton.OK, MessageBoxImage.Information,
+                                                       MessageBoxResult.OK, MessageBoxOptions.None);
+
 
                     WordsList.Add(word);
                     _wordsDboAdapter.Insert(word);        

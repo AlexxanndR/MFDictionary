@@ -16,9 +16,7 @@ namespace MFDictionary.MVVM.ViewModel
                     (window as MainWindow).MainWindowFrame.Navigate(new Uri(string.Format("{0}{1}{2}", "MVVM/View/", pageName, "View.xaml"), UriKind.RelativeOrAbsolute));
         }
 
-        public MainViewModel()
-        {
-        }
+        public MainViewModel() { }
 
         public RelayCommand MenuSelectionCommand
         {

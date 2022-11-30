@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MFDictionary.MVVM.Model
 {
-    internal class TestWord : ObservableObject
+    public class TestWord : ObservableObject
     {
         public string Text { get; set; }
 

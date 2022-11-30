@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MFDictionary.Services
 {
-    internal class YandexAnswer
+    public class YandexAnswer
     {
         public YandexDictionary DictionaryAnswer { get; set; }
 

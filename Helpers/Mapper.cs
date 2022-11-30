@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MFDictionary.Helpers
 {
-    internal static class Mapper
+    public static class Mapper
     {
         public static Word GetWord(this YandexDictionary yandexDictionary)
         {

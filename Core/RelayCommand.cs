@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace MFDictionary.Core
 {
-    internal class RelayCommand : ICommand
+    public class RelayCommand : ICommand
     {
         private Action<object> _execute;
         private Func<Object, bool> _canExecute;
