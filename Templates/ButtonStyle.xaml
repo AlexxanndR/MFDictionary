@@ -3,6 +3,7 @@
     <Style BasedOn="{StaticResource {x:Type ToggleButton}}"
            TargetType="{x:Type RadioButton}"
            x:Key="MenuButtonStyle">
+        
         <Style.Setters>
             <Setter Property="Template">
                 <Setter.Value>
@@ -10,7 +11,7 @@
                         <Grid Background="{TemplateBinding Background}">
                             <Border Width ="{TemplateBinding Width}" Height="{TemplateBinding Height}">
                                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
-                                           FontSize="20" FontFamily="Oswald Medium"
+                                           FontSize="20" FontFamily="Oswald Light"
                                            Foreground="{TemplateBinding Foreground}"
                                            Text="{TemplateBinding Property=Content}"/>
                             </Border>
@@ -22,16 +23,22 @@
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Background" Value="Transparent"/>
         </Style.Setters>
+        
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="#00FFAC"/>
+                <Setter Property="FontFamily" Value="Oswald Medium"/>
+                <Setter Property="BorderThickness" Value="0 0 0 1"/>
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Background" Value="#00FFAC"/>
+                <Setter Property="FontFamily" Value="Oswald Light"/>
+                <Setter Property="BorderThickness" Value="0 0 0 1"/>
             </Trigger>
             <Trigger Property="Content" Value="DICTIONARY">
                 <Setter Property="IsChecked" Value="True"/>
             </Trigger>
         </Style.Triggers>
+        
     </Style>
 </ResourceDictionary>

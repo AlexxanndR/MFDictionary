@@ -216,7 +216,7 @@ namespace MFDictionary.MVVM.ViewModel
 
                     if (word == null)
                     {
-                        messageBoxResult = MessageBox.Show("Oopa! The word '" + SearchWord + "' not found! Spelling error or non-existent word.", "Error",
+                        messageBoxResult = MessageBox.Show("Oops! The word '" + SearchWord + "' not found! Spelling error or non-existent word.", "Error",
                                                            MessageBoxButton.OK, MessageBoxImage.Error,
                                                            MessageBoxResult.OK, MessageBoxOptions.None);
                         return;

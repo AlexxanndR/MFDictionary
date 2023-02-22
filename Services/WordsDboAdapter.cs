@@ -5,14 +5,20 @@ using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Windows;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using System.IO;
 
 namespace MFDictionary.Services
 {
     internal class WordsDboAdapter
     {
+        private const string dbName = "DictionaryDB";
         private string _connectionString;
         SqlConnection _sqlConnection;
 
@@ -22,8 +28,110 @@ namespace MFDictionary.Services
             _sqlConnection = new SqlConnection(_connectionString);
         }
 
+        private bool isDatabaseExists()
+        {
+            bool result = false;
+
+            try
+            {
+                string connectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=;Integrated Security=true";
+                SqlConnection sqlConnection = new SqlConnection(connectionString);
+                string isDbCreatedQuery = String.Format("SELECT database_id FROM sys.databases WHERE Name = '{0}'", dbName);
+
+                using (sqlConnection)
+                {
+                    using (SqlCommand sqlcommand = new SqlCommand(isDbCreatedQuery, sqlConnection))
+                    {
+                        sqlConnection.Open();
+
+                        object resultObj = sqlcommand.ExecuteScalar();
+
+                        int databaseID = 0;
+                        if (resultObj != null)
+                            int.TryParse(resultObj.ToString(), out databaseID);
+
+                        _sqlConnection.Close();
+
+                        result = (databaseID > 0);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result = false;
+            }
+
+            return result;
+        }
+
+        private bool CreateDatabase()
+        {
+            string connectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=;Integrated Security=true";
+            SqlConnection sqlConnection = new SqlConnection(connectionString);
+
+            string[] files = { Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dbName + ".mdf"),
+                               Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dbName + ".ldf")};
+
+            string createDbQuery = String.Format("CREATE DATABASE DictionaryDB ON "
+                + "PRIMARY (name=" + dbName + "_data, filename='{0}', "
+                + "size=2GB, maxsize=10GB, filegrowth=10%)"
+                + "LOG ON (name=" + dbName + "_log, filename='{1}', "
+                + "size=100MB, maxsize=500MB, filegrowth=10%)", files[0], files[1]);
+
+            try
+            {
+                using (sqlConnection)
+                {
+                    sqlConnection.Open();
+
+                    SqlCommand sqlCommand = new SqlCommand(createDbQuery, sqlConnection);
+                    sqlCommand.ExecuteNonQuery();
+                }
+            } 
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool CreateTable()
+        {
+            bool isCreated = false;
+
+            _sqlConnection.Open();
+
+            string createTableQuery = "CREATE TABLE Words" +
+                "(WordId INTEGER IDENTITY(1,1) PRIMARY KEY," +
+                "Text NVARCHAR(50), Translation NVARCHAR(50), Example1 NVARCHAR(150), Example2 NVARCHAR(150), Example2 NVARCHAR(150))";
+
+            try
+            {
+                SqlCommand createTableCommand = new SqlCommand(createTableQuery, _sqlConnection);
+                createTableCommand.ExecuteNonQuery();
+                isCreated = true;
+            }
+            catch (Exception ex)
+            {
+                isCreated = false;
+            }
+            finally
+            {
+                _sqlConnection.Close();
+            }
+
+            return isCreated;
+        }
+
         public ObservableCollection<Word> GetAll()
         {
+            if (isDatabaseExists() == false)
+            {
+                CreateDatabase();
+                CreateTable();
+            }
+
             _sqlConnection.Open();
 
             ObservableCollection<Word> words = new ObservableCollection<Word>();

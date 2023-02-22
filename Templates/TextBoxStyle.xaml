@@ -7,7 +7,24 @@
                 <ControlTemplate TargetType="{x:Type TextBox}">
                     <Border CornerRadius="10">
                         <Grid>
-                            <Rectangle Stroke="Black" StrokeThickness="1"/>
+                            <Rectangle Stroke="Black" StrokeThickness="1">
+                                <Rectangle.Style>
+                                    <Style TargetType="{x:Type Rectangle}">
+                                        <Style.Triggers>
+                                            <EventTrigger RoutedEvent="KeyDown">
+                                                <EventTrigger.Actions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetProperty="StrokeThickness"
+                                                                             To="0" Duration="0:0:1"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </EventTrigger.Actions>
+                                            </EventTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Rectangle.Style>
+                            </Rectangle>
                             <TextBox x:Name="SearchBox" Margin="1" Padding="5"
                                      Text="{Binding Path=Text, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                      BorderThickness="0"

@@ -24,12 +24,10 @@
             <RowDefinition Height="8*"/>
         </Grid.RowDefinitions>
 
-        <ScrollViewer Grid.Row="0"
-                      VerticalScrollBarVisibility="Auto">
-            <ListBox ItemsSource="{Binding TestWordsList, UpdateSourceTrigger=PropertyChanged}"
-                     Background="Transparent"
-                     ItemContainerStyle="{StaticResource WordsTestListBoxItem}"/>
-        </ScrollViewer>
+        <ListBox Grid.Row="0" ItemsSource="{Binding TestWordsList, UpdateSourceTrigger=PropertyChanged}"
+                 Background="Transparent"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 ItemContainerStyle="{StaticResource WordsTestListBoxItem}"/>
 
         <Border Grid.Row="1" 
                 Background="#8AFFD9">
