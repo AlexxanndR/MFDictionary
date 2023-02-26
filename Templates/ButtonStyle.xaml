@@ -27,13 +27,11 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="#00FFAC"/>
-                <Setter Property="FontFamily" Value="Oswald Medium"/>
                 <Setter Property="BorderThickness" Value="0 0 0 1"/>
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Background" Value="#00FFAC"/>
-                <Setter Property="FontFamily" Value="Oswald Light"/>
-                <Setter Property="BorderThickness" Value="0 0 0 1"/>
+                <Setter Property="BorderThickness" Value="0 0 0 10"/>
             </Trigger>
             <Trigger Property="Content" Value="DICTIONARY">
                 <Setter Property="IsChecked" Value="True"/>

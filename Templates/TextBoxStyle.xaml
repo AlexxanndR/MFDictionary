@@ -28,7 +28,7 @@
                             <TextBox x:Name="SearchBox" Margin="1" Padding="5"
                                      Text="{Binding Path=Text, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                      BorderThickness="0"
-                                     FontSize="20" FontFamily="Oswald Medium"
+                                     FontSize="20" FontFamily="Oswald Light"
                                      Background="Transparent" Foreground="Black"
                                      VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
                             <TextBlock Text= "Write a word..."

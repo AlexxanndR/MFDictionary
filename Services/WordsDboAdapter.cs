@@ -26,6 +26,13 @@ namespace MFDictionary.Services
         {
             _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             _sqlConnection = new SqlConnection(_connectionString);
+
+            if (isDatabaseExists() == false)
+            {
+                CreateDatabase();
+                CreateTable();
+                CreateInsertProcedure();
+            }
         }
 
         private bool isDatabaseExists()
@@ -74,7 +81,7 @@ namespace MFDictionary.Services
 
             string createDbQuery = String.Format("CREATE DATABASE DictionaryDB ON "
                 + "PRIMARY (name=" + dbName + "_data, filename='{0}', "
-                + "size=2GB, maxsize=10GB, filegrowth=10%)"
+                + "size=500MB, maxsize=5GB, filegrowth=10%)"
                 + "LOG ON (name=" + dbName + "_log, filename='{1}', "
                 + "size=100MB, maxsize=500MB, filegrowth=10%)", files[0], files[1]);
 
@@ -103,8 +110,8 @@ namespace MFDictionary.Services
             _sqlConnection.Open();
 
             string createTableQuery = "CREATE TABLE Words" +
-                "(WordId INTEGER IDENTITY(1,1) PRIMARY KEY," +
-                "Text NVARCHAR(50), Translation NVARCHAR(50), Example1 NVARCHAR(150), Example2 NVARCHAR(150), Example2 NVARCHAR(150))";
+                "(Id INTEGER NOT NULL IDENTITY(1,1) PRIMARY KEY," +
+                "Text NVARCHAR(50) NOT NULL, Translation NVARCHAR(50) NOT NULL, Example1 NVARCHAR(150), Example2 NVARCHAR(150), Example3 NVARCHAR(150))";
 
             try
             {
@@ -124,14 +131,41 @@ namespace MFDictionary.Services
             return isCreated;
         }
 
-        public ObservableCollection<Word> GetAll()
+        private bool CreateInsertProcedure()
         {
-            if (isDatabaseExists() == false)
+            bool isCreated = false;
+
+            string query =
+              "CREATE PROCEDURE sp_InsertWord ( " +
+              "@Text NVARCHAR(50)," +
+              "@Translation NVARCHAR(50)," + 
+              "@Example1 NVARCHAR(150)," +
+              "@Example2 NVARCHAR(150)," + 
+              "@Example3 NVARCHAR(150))" +
+              "AS INSERT INTO Words(Text,Translation,Example1,Example2,Example3) Values(@Text,@Translation,@Example1,@Example2,@Example3)";
+
+            SqlCommand sqlCommand = new SqlCommand(query, _sqlConnection);
+
+            try
             {
-                CreateDatabase();
-                CreateTable();
+                _sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
+                isCreated = true;
+            }
+            catch (SqlException e)
+            {
+                isCreated = false;
+            }
+            finally
+            {
+                _sqlConnection.Close();
             }
 
+            return isCreated;
+        }
+
+        public ObservableCollection<Word> GetAll()
+        {
             _sqlConnection.Open();
 
             ObservableCollection<Word> words = new ObservableCollection<Word>();
@@ -170,8 +204,6 @@ namespace MFDictionary.Services
             sqlCommand.Parameters.AddWithValue("@example1", (object)word.Example1 ?? DBNull.Value);
             sqlCommand.Parameters.AddWithValue("@example2", (object)word.Example2 ?? DBNull.Value);
             sqlCommand.Parameters.AddWithValue("@example3", (object)word.Example3 ?? DBNull.Value);
-            SqlParameter parameter = sqlCommand.Parameters.Add("@Id", SqlDbType.BigInt, 0, "Id");
-            parameter.Direction = ParameterDirection.Output;
 
             sqlCommand.ExecuteNonQuery();
 
