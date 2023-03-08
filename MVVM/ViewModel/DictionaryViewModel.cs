@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -136,9 +137,9 @@ namespace MFDictionary.MVVM.ViewModel
 
         private async Task Init()
         {
-            WordsList = _wordsDboAdapter.GetAll();
-
             var langs = await _yandexService.GetLangsAsync();
+
+            WordsList = _wordsDboAdapter.GetAll();
 
             foreach (var lang in langs)
             {
@@ -167,9 +168,25 @@ namespace MFDictionary.MVVM.ViewModel
                     } 
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Oops! No internet connection.", "Warning", MessageBoxButton.OK, 
-                                        MessageBoxImage.Warning, MessageBoxResult.OK, MessageBoxOptions.None);
+                        if (ex.InnerException is HttpRequestException)
+                        {
+                            MessageBox.Show("Oops! No internet connection.", "Warning", MessageBoxButton.OK,
+                                            MessageBoxImage.Warning, MessageBoxResult.OK, MessageBoxOptions.None);
+                        }
                     }
+                });
+            }
+        }
+
+        public RelayCommand SelectWordCommand
+        {
+            get
+            {
+                return new RelayCommand((wordId) =>
+                {
+                    foreach (Window window in Application.Current.Windows)
+                        if (window.GetType() == typeof(MainWindow))
+                            (window as MainWindow).MainWindowFrame.Navigate(new Uri(string.Format("MVVM/View/WordEditView.xaml?parameter={0}", wordId), UriKind.RelativeOrAbsolute));
                 });
             }
         }
@@ -247,8 +264,8 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 return new RelayCommand((wordId) =>
                 {
-                    _wordsDboAdapter.Delete((long)wordId);
-                    WordsList.Remove(WordsList.Single(x => x.Id == (long)wordId));
+                    _wordsDboAdapter.Delete((int)wordId);
+                    WordsList.Remove(WordsList.Single(x => x.Id == (int)wordId));
                 });
             }
         }

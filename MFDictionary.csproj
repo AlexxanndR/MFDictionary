@@ -84,12 +84,16 @@
     <Compile Include="MVVM\Model\Word.cs" />
     <Compile Include="MVVM\ViewModel\DictionaryViewModel.cs" />
     <Compile Include="MVVM\ViewModel\TestViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\WordEditViewModel.cs" />
     <Compile Include="MVVM\View\DictionaryView.xaml.cs">
       <DependentUpon>DictionaryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\Model\YandexAnswer.cs" />
     <Compile Include="MVVM\View\TestView.xaml.cs">
       <DependentUpon>TestView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\WordEditView.xaml.cs">
+      <DependentUpon>WordEditView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\WordsDboAdapter.cs" />
     <Compile Include="Services\YandexService.cs" />
@@ -104,6 +108,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MVVM\View\TestView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\WordEditView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -157,6 +165,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\app_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\close_icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

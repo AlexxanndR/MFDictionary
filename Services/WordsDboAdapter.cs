@@ -177,7 +177,7 @@ namespace MFDictionary.Services
             {
                 Word word = new Word();
 
-                word.Id = (long)reader["Id"];
+                word.Id = (int)reader["Id"];
                 word.Text = reader["Text"].ToString();
                 word.Translation = reader["Translation"].ToString();
                 word.Example1 = reader["Example1"]?.ToString() ?? String.Empty;
@@ -245,7 +245,7 @@ namespace MFDictionary.Services
             {
                 Word word = new Word();
 
-                word.Id = (long)reader["Id"];
+                word.Id = (int)reader["Id"];
                 word.Text = (string)reader["Text"];
                 word.Translation = (string)reader["Translation"];
                 word.Example1 = reader["Example1"]?.ToString() ?? String.Empty;

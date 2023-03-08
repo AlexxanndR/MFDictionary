@@ -3,7 +3,6 @@
     <Style BasedOn="{StaticResource {x:Type ToggleButton}}"
            TargetType="{x:Type RadioButton}"
            x:Key="MenuButtonStyle">
-        
         <Style.Setters>
             <Setter Property="Template">
                 <Setter.Value>
@@ -23,20 +22,62 @@
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Background" Value="Transparent"/>
         </Style.Setters>
-        
+
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="#00FFAC"/>
-                <Setter Property="BorderThickness" Value="0 0 0 1"/>
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Background" Value="#00FFAC"/>
-                <Setter Property="BorderThickness" Value="0 0 0 10"/>
-            </Trigger>
-            <Trigger Property="Content" Value="DICTIONARY">
-                <Setter Property="IsChecked" Value="True"/>
             </Trigger>
         </Style.Triggers>
-        
+
+    </Style>
+
+    <Style TargetType="{x:Type Button}"
+           x:Key="CloseButtonStyle">
+        <Style.Setters>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid Background="{TemplateBinding Background}">
+                            <Border Width ="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                                <Image Source = "{TemplateBinding Button.Content}"
+                                       HorizontalAlignment="Center"
+                                       Width = "30" Height="30"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style.Setters>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="MistyRose"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="RectangleButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid>
+                        <Rectangle Fill="{TemplateBinding Background}" Stroke="Black"
+                                   RadiusY="5" RadiusX="5"/>
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#00FFAC"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>
