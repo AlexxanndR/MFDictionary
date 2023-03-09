@@ -21,14 +21,19 @@
     <Grid Background="#C8FFED">
         <Grid.RowDefinitions>
             <RowDefinition Height="5*"/>
-            <RowDefinition Height="95*"/>
+            <RowDefinition Height="88*"/>
+            <RowDefinition Height="7*"/>
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0"
-                Background="#B9FFE8"/>
+                Background="#affae2"/>
+
+        <Border Grid.Row="2"
+                Background="#affae2"/>
 
         <Button HorizontalAlignment="Left"
-                Style="{StaticResource CloseButtonStyle}">
+                Style="{StaticResource CloseButtonStyle}"
+                Command="{Binding ExitCommand}">
             <BitmapImage UriSource="../../Icons/close_icon.png"/>
         </Button>
 
@@ -39,14 +44,70 @@
                 Style="{StaticResource RectangleButtonStyle}"/>
 
         <StackPanel Grid.Row="1"
-                    Orientation="Vertical">
-            <TextBlock Text="Word"
-                       HorizontalAlignment="Center"
-                       FontFamily="Oswald Medium" FontSize="20"/>
-            <TextBox HorizontalAlignment="Center"
-                     Width="500" Margin="5"
-                     Text="{Binding SearchWord, UpdateSourceTrigger=LostFocus}"
-                     Style="{StaticResource SearchTextBox}"/>
+                    Orientation="Vertical" Margin="10 20" Grid.RowSpan="2">
+            <Grid Margin="0 0 0 10">
+                <TextBox Tag="Word"
+                         HorizontalAlignment="Left"
+                         Width="570"
+                         Text="{Binding SearchWord, UpdateSourceTrigger=LostFocus}"
+                         Style="{StaticResource SearchTextBox}"/>
+                <TextBox Tag="Transcription"
+                         HorizontalAlignment="Right"
+                         Width="570"
+                         Text="{Binding Transciption, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource SearchTextBox}"/>
+            </Grid>
+            
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Center" Margin="0 0 0 10">
+                <TextBox Tag="Translation"
+                         HorizontalAlignment="Center"
+                         Width="570"
+                         Text="{Binding Traslation, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource SearchTextBox}"/>
+                <Button HorizontalAlignment="Left"
+                        Style="{StaticResource AcceptButtonStyle}"
+                        Command="{Binding AddTranslationCommand}">
+                    <BitmapImage UriSource="../../Icons/add_icon.png"/>
+                </Button>
+            </StackPanel>
+
+            <Grid Margin="0 0 0 10">
+                <ListBox ItemsSource="{Binding Translations}"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         ItemContainerStyle="{StaticResource WordsListBoxItem}">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel IsItemsHost="True" Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+            </Grid>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" 
+                    Orientation="Horizontal" HorizontalAlignment="Center">
+
+            <ComboBox FontFamily="Agency FB" FontSize="20" 
+                      Width="150" Height="25" Margin="20 0 10 0"
+                      VerticalAlignment="Center" HorizontalAlignment="Center"
+                      IsEditable="true"
+                      ItemsSource="{Binding LangsFrom}" SelectedValue="{Binding LangFrom, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding LangFromChangedCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+
+            <Image Source="../../Icons/arrow_icon.png" Width="80"/>
+
+            <ComboBox FontFamily="Agency FB" FontSize="20" 
+                      Width="150" Height="25" Margin="20 0 10 0"
+                      VerticalAlignment="Center" HorizontalAlignment="Center"
+                      IsEditable="true"
+                      ItemsSource="{Binding LangsTo}" SelectedValue="{Binding LangTo, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
 
     </Grid>

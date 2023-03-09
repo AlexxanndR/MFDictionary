@@ -17,52 +17,13 @@
             <i:InvokeCommandAction Command="{Binding WindowLoadedCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="92*"/>
-            <RowDefinition Height="8*"/>
-        </Grid.RowDefinitions>
 
-        <ListBox Grid.Row="0" ItemsSource="{Binding WordsList}"
-                 Margin="0 10 0 0"
+    <Grid>
+        <ListBox ItemsSource="{Binding WordsList}"
+                 Margin="0 10"
                  Background="Transparent"
                  BorderThickness="0"
                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                 ItemContainerStyle="{StaticResource WordsListBoxItem}"/>
-
-        <Border Grid.Row="1" 
-                Background="#8AFFD9">
-            <StackPanel Orientation="Horizontal">
-                <TextBox Width="400" Margin="5"
-                         Text="{Binding SearchWord, UpdateSourceTrigger=LostFocus}"
-                         Style="{StaticResource SearchTextBox}"/>
-                <ComboBox FontFamily="Oswald" FontWeight="Light" FontSize="20" 
-                          Width="100" Height="30" Margin="20 0 10 0"
-                          VerticalAlignment="Center" HorizontalAlignment="Center"
-                          IsEditable="true"
-                          ItemsSource="{Binding LangsFrom}" SelectedValue="{Binding LangFrom, UpdateSourceTrigger=PropertyChanged}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding LangFromChangedCommand}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ComboBox>
-
-                <Image Source="../../Icons/arrow_icon.png" Width="80"/>
-
-                <ComboBox FontFamily="Agency FB" FontSize="20" 
-                          Width="100" Height="30" Margin="20 0 10 0"
-                          VerticalAlignment="Center" HorizontalAlignment="Center"
-                          IsEditable="true"
-                          ItemsSource="{Binding LangsTo}" SelectedValue="{Binding LangTo, UpdateSourceTrigger=PropertyChanged}"/>
-
-                <Button Content="FIND" FontFamily="Agency FB" FontSize="30" 
-                        Width="200" Margin="200 5"
-                        VerticalAlignment="Center" HorizontalAlignment="Center"
-                        Background="Transparent"
-                        Cursor="Hand" Command="{Binding FindWordCommand}"/>
-            </StackPanel>
-        </Border>
+                 ItemContainerStyle="{StaticResource DictionaryListBoxItem}"/>
     </Grid>
 </UserControl>
