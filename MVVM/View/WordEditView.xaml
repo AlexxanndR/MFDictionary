@@ -14,7 +14,7 @@
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding WindowLoadedCommand}"/>
+            <i:InvokeCommandAction Command="{Binding WindowLoadedCommand}" CommandParameter="{Binding DictionaryViewModel.SelectedWordId}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
@@ -46,16 +46,16 @@
         <StackPanel Grid.Row="1"
                     Orientation="Vertical" Margin="10 20" Grid.RowSpan="2">
             <Grid Margin="0 0 0 10">
-                <TextBox Tag="Word"
+                <TextBox Tag="{Binding DictionaryViewModel.SelectedWordId}"
                          HorizontalAlignment="Left"
                          Width="570"
                          Text="{Binding SearchWord, UpdateSourceTrigger=LostFocus}"
-                         Style="{StaticResource SearchTextBox}"/>
+                         Style="{StaticResource CustomTextBox}"/>
                 <TextBox Tag="Transcription"
                          HorizontalAlignment="Right"
                          Width="570"
-                         Text="{Binding Transciption, UpdateSourceTrigger=PropertyChanged}"
-                         Style="{StaticResource SearchTextBox}"/>
+                         Text="{Binding Transciption, UpdateSourceTrigger=LostFocus}"
+                         Style="{StaticResource CustomTextBox}"/>
             </Grid>
             
             <StackPanel Orientation="Horizontal" 
@@ -63,8 +63,8 @@
                 <TextBox Tag="Translation"
                          HorizontalAlignment="Center"
                          Width="570"
-                         Text="{Binding Traslation, UpdateSourceTrigger=PropertyChanged}"
-                         Style="{StaticResource SearchTextBox}"/>
+                         Text="{Binding Translation, UpdateSourceTrigger=LostFocus}"
+                         Style="{StaticResource CustomTextBox}"/>
                 <Button HorizontalAlignment="Left"
                         Style="{StaticResource AcceptButtonStyle}"
                         Command="{Binding AddTranslationCommand}">
@@ -79,11 +79,26 @@
                          ItemContainerStyle="{StaticResource WordsListBoxItem}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel IsItemsHost="True" Orientation="Horizontal"/>
+                            <WrapPanel IsItemsHost="True" Orientation="Horizontal" 
+                                       Width="1100"/>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                 </ListBox>
             </Grid>
+
+            <StackPanel Orientation="Vertical" 
+                        HorizontalAlignment="Center" Margin="0 0 0 10">
+                <TextBox Tag="Examples"
+                         HorizontalAlignment="Center" TextWrapping="Wrap"
+                         Width="1000" Height="Auto" MaxHeight="150"
+                         Text="{Binding Examples, UpdateSourceTrigger=LostFocus}"
+                         Style="{StaticResource CustomTextBox}"/>
+                <TextBox Tag="Examples translation" TextWrapping="Wrap"
+                         HorizontalAlignment="Center"
+                         Width="1000" Height="Auto" MaxHeight="150"
+                         Text="{Binding ExamplesTraslation, UpdateSourceTrigger=LostFocus}"
+                         Style="{StaticResource CustomTextBox}"/>
+            </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="2" 

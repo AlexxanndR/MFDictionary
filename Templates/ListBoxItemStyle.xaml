@@ -117,55 +117,63 @@
 
     <Style TargetType="{x:Type ListBoxItem}"
            x:Key="WordsListBoxItem">
-        <Setter Property="Background" Value="#affae2"/>
-        <Setter Property="Height" Value="35"/>
-        <Setter Property="Width" Value="Auto"/>
-        <Setter Property="Margin" Value="5"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                    <Grid>
-                        <Rectangle Fill="{TemplateBinding Background}" Stroke="Black"
+        <Style.Setters>
+            <Setter Property="Background" Value="#affae2"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Grid>
+                            <Rectangle Fill="{TemplateBinding Background}" Stroke="Transparent"
                                    RadiusY="10" RadiusX="10"/>
 
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Grid.Column="0" Text="{Binding}"
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Grid.Column="0" Text="{Binding}"
                                        FontSize="15" FontFamily="Oswald Light"      
                                        Padding="5 5 0 5"
                                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-                            <Button Command="{Binding DataContext.DeleteWordCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Id}">
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Style.Setters>
-                                            <Setter Property="Cursor" Value="Hand"/>
-                                            <Setter Property="Background" Value="Transparent"/>
-                                            <Setter Property="Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate TargetType="Button">
-                                                        <Grid Background="{TemplateBinding Background}">
-                                                            <Border Width ="{TemplateBinding Width}" Height="{TemplateBinding Height}">
-                                                                <Image Source="../Icons/close_icon.png"
-                                                                       Width="20" Height="20"/>
-                                                            </Border>
-                                                        </Grid>
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Style.Setters>
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
+                                <Button Command="{Binding DataContext.DeleteWordCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Id}">
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Style.Setters>
+                                                <Setter Property="Cursor" Value="Hand"/>
                                                 <Setter Property="Background" Value="Transparent"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-                        </StackPanel>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Grid Background="{TemplateBinding Background}">
+                                                                <Border Width ="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                                                                    <Image Source="../Icons/close_icon.png"
+                                                                       Width="20" Height="20"/>
+                                                                </Border>
+                                                            </Grid>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style.Setters>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                
+                            </StackPanel>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style.Setters>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#00FFAC"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="{x:Type ListBoxItem}"

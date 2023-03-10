@@ -16,16 +16,7 @@ namespace MFDictionary.MVVM.ViewModel
     {
         YandexService _yandexService;
 
-        private ObservableCollection<string> _translations;
-        public ObservableCollection<string> Translations
-        {
-            get { return _translations; }
-            set
-            {
-                _translations = value;
-                OnPropertyChanged();
-            }
-        }
+        public DictionaryViewModel DictionaryViewModel { get; private set; }
 
         private Dictionary<string, string> _langsShortForm = new Dictionary<string, string>()
         {
@@ -109,6 +100,66 @@ namespace MFDictionary.MVVM.ViewModel
             }
         }
 
+        private string _searchWord;
+
+        public string SearchWord
+        {
+            get { return _searchWord; }
+            set
+            {
+                _searchWord = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _transcription;
+
+        public string Transcription
+        {
+            get { return _transcription; }
+            set
+            {
+                _transcription = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _translation;
+
+        public string Translation
+        {
+            get { return _translation; }
+            set
+            {
+                _translation = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<string> _translations;
+
+        public ObservableCollection<string> Translations
+        {
+            get { return _translations; }
+            set
+            {
+                _translations = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<string> _examples;
+
+        public ObservableCollection<string> Examples
+        {
+            get { return _examples; }
+            set
+            {
+                _examples = value;
+                OnPropertyChanged();
+            }
+        }
+
         public WordEditViewModel()
         {
             _translations = new ObservableCollection<string>()
@@ -117,6 +168,7 @@ namespace MFDictionary.MVVM.ViewModel
                 "asdasasdasdaasdd", "asdasasdasdaasdd", "asdasasdasdaasdd", "asdasasdasdaasdd",
                 "asdasasdasdaasdd", "asdasasdasdaasdd", "asdasasdasdaasdd"
             };
+            DictionaryViewModel = App.Current.
             _yandexService = new YandexService();
             _langsRatio = new Dictionary<string, List<string>>();
             _langsFrom = new List<string>();
@@ -168,7 +220,7 @@ namespace MFDictionary.MVVM.ViewModel
         {
             get
             {
-                return new RelayCommand((change) =>
+                return new RelayCommand((obj) =>
                 {
                     foreach (Window window in Application.Current.Windows)
                         if (window.GetType() == typeof(MainWindow))
@@ -181,7 +233,7 @@ namespace MFDictionary.MVVM.ViewModel
         {
             get
             {
-                return new RelayCommand((change) =>
+                return new RelayCommand((obj) =>
                 {
                     if (LangFrom != null)
                         LangsTo = _langsRatio[LangFrom];
@@ -189,6 +241,70 @@ namespace MFDictionary.MVVM.ViewModel
             }
         }
 
+        public RelayCommand AddTranslationCommand
+        {
+            get
+            {
+                return new RelayCommand((obj) =>
+                {
+                   Translations.Add(Translation);
+                });
+            }
+        }
 
+        /*        public RelayCommand FindWordCommand
+                {
+                    get
+                    {
+                        return new RelayCommand(async (action) =>
+                        {
+                            MessageBoxResult messageBoxResult = MessageBoxResult.None;
+
+                            if (String.IsNullOrWhiteSpace(SearchWord))
+                            {
+                                messageBoxResult = MessageBox.Show("The search word is missing!", "Warning", MessageBoxButton.OK,
+                                                                   MessageBoxImage.Warning, MessageBoxResult.OK, MessageBoxOptions.None);
+                                return;
+                            }
+
+                            if (LangFrom == null || LangTo == null)
+                            {
+                                messageBoxResult = MessageBox.Show("Translation direction not selected!", "Warning", MessageBoxButton.OK,
+                                                                   MessageBoxImage.Warning, MessageBoxResult.OK, MessageBoxOptions.None);
+                                return;
+                            }
+
+                            var langFrom = _langsShortForm.FirstOrDefault(x => x.Value == LangFrom).Key;
+                            var langTo = _langsShortForm.FirstOrDefault(x => x.Value == LangTo).Key;
+
+                            var wordInfo = await _yandexService.LookupAsync(SearchWord, langFrom, langTo);
+                            Word word = wordInfo.DictionaryAnswer.GetWord();
+
+                            if (word == null)
+                            {
+                                messageBoxResult = MessageBox.Show("Oops! The word '" + SearchWord + "' not found! Spelling error or non-existent word.", "Error",
+                                                                   MessageBoxButton.OK, MessageBoxImage.Error,
+                                                                   MessageBoxResult.OK, MessageBoxOptions.None);
+                                return;
+                            }
+
+                            if (WordsList.Any(x => x.Text == word.Text && x.Translation == word.Translation))
+                            {
+                                messageBoxResult = MessageBox.Show("Oops! The word '" + SearchWord + "' has already been added to the dictionary!", "Warning",
+                                                                   MessageBoxButton.OK, MessageBoxImage.Warning,
+                                                                   MessageBoxResult.OK, MessageBoxOptions.None);
+                                return;
+                            }
+
+                            messageBoxResult = MessageBox.Show("Word '" + SearchWord + "' was successfully found!", "Information",
+                                                               MessageBoxButton.OK, MessageBoxImage.Information,
+                                                               MessageBoxResult.OK, MessageBoxOptions.None);
+
+
+                            WordsList.Add(word);
+                            _wordsDboAdapter.Insert(word);
+                        });
+                    }
+                }*/
     }
 }

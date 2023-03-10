@@ -25,5 +25,12 @@
                  BorderThickness="0"
                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                  ItemContainerStyle="{StaticResource DictionaryListBoxItem}"/>
+        <Button Content="ADD"
+                FontFamily="Oswald Light" FontSize="20"
+                Width="100" Height="30"
+                Margin="5"
+                HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                Style="{StaticResource RectangleButtonStyle}"
+                Command="{Binding AddWordCommand}"/>
     </Grid>
 </UserControl>
