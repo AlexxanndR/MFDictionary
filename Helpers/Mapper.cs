@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MFDictionary.Helpers
 {
@@ -17,14 +18,14 @@ namespace MFDictionary.Helpers
             return new Word
             {
                 Text = yandexDictionary.def.First().text,
-                Translation = yandexDictionary.def.First().tr.First().text,
-                Example1 = yandexDictionary.def.First().tr.First().ex?.ElementAtOrDefault(0)?.text,
-                Example2 = yandexDictionary.def.First().tr.First().ex?.ElementAtOrDefault(1)?.text,
-                Example3 = yandexDictionary.def.First().tr.First().ex?.ElementAtOrDefault(2)?.text
+                Transcription = yandexDictionary.def.First().ts,
+                Translation = yandexDictionary.def.First().tr.Select(x => x.text).ToList(),
+                Examples = yandexDictionary.def.First().tr.Where(x => x.ex != null).Select(y => y.text).ToList(),
+                ExamplesTranslation = yandexDictionary.def.First().tr.Where(x => x.ex != null).SelectMany(y => y.ex.SelectMany(z => z.tr.Select(i => i.text))).ToList(),
             };
         }
 
-        public static TestWord GetTestWord(this Word word)
+/*        public static TestWord GetTestWord(this Word word)
         {
             return new TestWord
             {
@@ -33,6 +34,6 @@ namespace MFDictionary.Helpers
                 Translation = word.Translation,
                 ResultColor = "Black"
             };
-        }
+        }*/
     }
 }

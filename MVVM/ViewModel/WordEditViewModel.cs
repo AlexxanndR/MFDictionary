@@ -1,4 +1,5 @@
 ﻿using MFDictionary.Core;
+using MFDictionary.Helpers;
 using MFDictionary.MVVM.Model;
 using MFDictionary.Services;
 using System;
@@ -14,9 +15,9 @@ namespace MFDictionary.MVVM.ViewModel
 {
     internal class WordEditViewModel : ObservableObject
     {
-        YandexService _yandexService;
+        private YandexService _yandexService;
 
-        public DictionaryViewModel DictionaryViewModel { get; private set; }
+        WordsDboAdapter _wordsDboAdapter;
 
         private Dictionary<string, string> _langsShortForm = new Dictionary<string, string>()
         {
@@ -100,14 +101,14 @@ namespace MFDictionary.MVVM.ViewModel
             }
         }
 
-        private string _searchWord;
+        private string _translatableWord;
 
-        public string SearchWord
+        public string TranslatableWord
         {
-            get { return _searchWord; }
+            get { return _translatableWord; }
             set
             {
-                _searchWord = value;
+                _translatableWord = value;
                 OnPropertyChanged();
             }
         }
@@ -160,15 +161,21 @@ namespace MFDictionary.MVVM.ViewModel
             }
         }
 
+        private ObservableCollection<string> _examplesTranslation;
+
+        public ObservableCollection<string> ExamplesTranslation
+        {
+            get { return _examplesTranslation; }
+            set
+            {
+                _examplesTranslation = value;
+                OnPropertyChanged();
+            }
+        }
+
         public WordEditViewModel()
         {
-            _translations = new ObservableCollection<string>()
-            {
-                "adsas", "asdasasdasdaasdd", "adasd", "asdasasdasdaasdd", "asdasasdasdaasdd",
-                "asdasasdasdaasdd", "asdasasdasdaasdd", "asdasasdasdaasdd", "asdasasdasdaasdd",
-                "asdasasdasdaasdd", "asdasasdasdaasdd", "asdasasdasdaasdd"
-            };
-            DictionaryViewModel = App.Current.
+            _wordsDboAdapter = new WordsDboAdapter();
             _yandexService = new YandexService();
             _langsRatio = new Dictionary<string, List<string>>();
             _langsFrom = new List<string>();
@@ -229,6 +236,28 @@ namespace MFDictionary.MVVM.ViewModel
             }
         }
 
+        public RelayCommand SaveCommand
+        {
+            get
+            {
+                return new RelayCommand((obj) =>
+                {
+                    _wordsDboAdapter.Insert(new Word
+                    {
+                        Text = this.TranslatableWord,
+                        Transcription = this.Transcription,
+                        Translation = this.Translations.ToList(),
+                        Examples = this.Examples.ToList(),
+                        ExamplesTranslation = this.ExamplesTranslation.ToList()
+                    });
+
+                    foreach (Window window in Application.Current.Windows)
+                        if (window.GetType() == typeof(MainWindow))
+                            (window as MainWindow).MainWindowFrame.Navigate(new Uri(string.Format("MVVM/View/DictionaryView.xaml"), UriKind.RelativeOrAbsolute));
+                });
+            }
+        }
+
         public RelayCommand LangFromChangedCommand
         {
             get
@@ -247,64 +276,53 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 return new RelayCommand((obj) =>
                 {
-                   Translations.Add(Translation);
+                   if (!String.IsNullOrWhiteSpace(Translation))
+                        Translations.Add(Translation);
                 });
             }
         }
 
-        /*        public RelayCommand FindWordCommand
+        public RelayCommand DeleteTranslationCommand
+        {
+            get
+            {
+                return new RelayCommand((selectedTranslation) =>
                 {
-                    get
+                    Translations.Remove((string)selectedTranslation);
+                });
+            }
+        }
+
+        public RelayCommand SearchWordCommand
+        {
+            get
+            {
+                return new RelayCommand(async (action) =>
+                {
+                    var langFrom = _langsShortForm.FirstOrDefault(x => x.Value == LangFrom).Key;
+                    var langTo = _langsShortForm.FirstOrDefault(x => x.Value == LangTo).Key;
+
+                    var wordInfo = await _yandexService.LookupAsync(TranslatableWord, langFrom, langTo);
+                    Word word = wordInfo.DictionaryAnswer?.GetWord();
+
+                    if (word != null)
                     {
-                        return new RelayCommand(async (action) =>
-                        {
-                            MessageBoxResult messageBoxResult = MessageBoxResult.None;
+                        /*                        if (WordsList.Any(x => x.Text == word.Text && x.Translation == word.Translation))
+                                                {
+                                                    messageBoxResult = MessageBox.Show("Oops! The word '" + SearchWord + "' has already been added to the dictionary!", "Warning",
+                                                                                       MessageBoxButton.OK, MessageBoxImage.Warning,
+                                                                                       MessageBoxResult.OK, MessageBoxOptions.None);
+                                                    return;
+                                                }*/
 
-                            if (String.IsNullOrWhiteSpace(SearchWord))
-                            {
-                                messageBoxResult = MessageBox.Show("The search word is missing!", "Warning", MessageBoxButton.OK,
-                                                                   MessageBoxImage.Warning, MessageBoxResult.OK, MessageBoxOptions.None);
-                                return;
-                            }
-
-                            if (LangFrom == null || LangTo == null)
-                            {
-                                messageBoxResult = MessageBox.Show("Translation direction not selected!", "Warning", MessageBoxButton.OK,
-                                                                   MessageBoxImage.Warning, MessageBoxResult.OK, MessageBoxOptions.None);
-                                return;
-                            }
-
-                            var langFrom = _langsShortForm.FirstOrDefault(x => x.Value == LangFrom).Key;
-                            var langTo = _langsShortForm.FirstOrDefault(x => x.Value == LangTo).Key;
-
-                            var wordInfo = await _yandexService.LookupAsync(SearchWord, langFrom, langTo);
-                            Word word = wordInfo.DictionaryAnswer.GetWord();
-
-                            if (word == null)
-                            {
-                                messageBoxResult = MessageBox.Show("Oops! The word '" + SearchWord + "' not found! Spelling error or non-existent word.", "Error",
-                                                                   MessageBoxButton.OK, MessageBoxImage.Error,
-                                                                   MessageBoxResult.OK, MessageBoxOptions.None);
-                                return;
-                            }
-
-                            if (WordsList.Any(x => x.Text == word.Text && x.Translation == word.Translation))
-                            {
-                                messageBoxResult = MessageBox.Show("Oops! The word '" + SearchWord + "' has already been added to the dictionary!", "Warning",
-                                                                   MessageBoxButton.OK, MessageBoxImage.Warning,
-                                                                   MessageBoxResult.OK, MessageBoxOptions.None);
-                                return;
-                            }
-
-                            messageBoxResult = MessageBox.Show("Word '" + SearchWord + "' was successfully found!", "Information",
-                                                               MessageBoxButton.OK, MessageBoxImage.Information,
-                                                               MessageBoxResult.OK, MessageBoxOptions.None);
-
-
-                            WordsList.Add(word);
-                            _wordsDboAdapter.Insert(word);
-                        });
+                        TranslatableWord = word.Text;
+                        Transcription = word?.Transcription;
+                        Translations = new ObservableCollection<string>(word.Translation);
+                        Examples = new ObservableCollection<string>(word.Examples);
+                        ExamplesTranslation = new ObservableCollection<string>(word.ExamplesTranslation);
                     }
-                }*/
+                });
+            }
+        }
     }
 }

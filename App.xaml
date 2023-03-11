@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="/Templates/ListBoxItemStyle.xaml"/>
                 <ResourceDictionary Source="/Templates/ButtonStyle.xaml"/>
                 <ResourceDictionary Source="/Templates/TextBoxStyle.xaml"/>
+                <ResourceDictionary Source="/Templates/Colors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type viewModel:DictionaryViewModel}">

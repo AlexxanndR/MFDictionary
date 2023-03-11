@@ -62,8 +62,8 @@ namespace MFDictionary.MVVM.ViewModel
                 return;
 
             List<Word> words = _wordsDboAdapter.GetRandomWords(10);          
-            foreach (Word word in words)
-                TestWordsList.Add(word.GetTestWord());
+/*            foreach (Word word in words)
+                TestWordsList.Add(word.GetTestWord());*/
         }
 
         public RelayCommand WindowLoadedCommand

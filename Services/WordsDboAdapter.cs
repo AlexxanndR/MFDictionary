@@ -111,7 +111,7 @@ namespace MFDictionary.Services
 
             string createTableQuery = "CREATE TABLE Words" +
                 "(Id INTEGER NOT NULL IDENTITY(1,1) PRIMARY KEY," +
-                "Text NVARCHAR(50) NOT NULL, Translation NVARCHAR(50) NOT NULL, Example1 NVARCHAR(150), Example2 NVARCHAR(150), Example3 NVARCHAR(150))";
+                "Text NVARCHAR(50) NOT NULL, Transcription NVARCHAR(50), Translation NVARCHAR(MAX) NOT NULL, Examples NVARCHAR(MAX), ExamplesTranslation NVARCHAR(MAX))";
 
             try
             {
@@ -135,14 +135,14 @@ namespace MFDictionary.Services
         {
             bool isCreated = false;
 
-            string query =
-              "CREATE PROCEDURE sp_InsertWord ( " +
-              "@Text NVARCHAR(50)," +
-              "@Translation NVARCHAR(50)," + 
-              "@Example1 NVARCHAR(150)," +
-              "@Example2 NVARCHAR(150)," + 
-              "@Example3 NVARCHAR(150))" +
-              "AS INSERT INTO Words(Text,Translation,Example1,Example2,Example3) Values(@Text,@Translation,@Example1,@Example2,@Example3)";
+            string query = 
+             "CREATE PROCEDURE sp_InsertWord ( " + 
+             "@Text NVARCHAR(50)," +
+             "@Transcription NVARCHAR(MAX)," +
+             "@Translation NVARCHAR(MAX)," + 
+             "@Examples NVARCHAR(MAX)," +
+             "@ExamplesTranslation NVARCHAR(MAX))" +
+             "AS INSERT INTO Words(Text,Transcription,Translation,Examples,ExamplesTranslation) Values(@Text,@Transcription,@Translation,@Examples,@ExamplesTranslation)";
 
             SqlCommand sqlCommand = new SqlCommand(query, _sqlConnection);
 
@@ -179,10 +179,10 @@ namespace MFDictionary.Services
 
                 word.Id = (int)reader["Id"];
                 word.Text = reader["Text"].ToString();
-                word.Translation = reader["Translation"].ToString();
-                word.Example1 = reader["Example1"]?.ToString() ?? String.Empty;
-                word.Example2 = reader["Example2"]?.ToString() ?? String.Empty;
-                word.Example3 = reader["Example3"]?.ToString() ?? String.Empty;
+                word.Transcription = reader["Transcription"].ToString() ?? String.Empty;
+                word.Translation = reader["Translation"].ToString().Split(' ').ToList();
+                word.Examples = reader["Examples"]?.ToString().Split(' ').ToList();
+                word.ExamplesTranslation = reader["ExamplesTranslation"]?.ToString().Split(' ').ToList();
 
                 words.Add(word);
             }
@@ -199,11 +199,11 @@ namespace MFDictionary.Services
             SqlCommand sqlCommand = new SqlCommand("sp_InsertWord", _sqlConnection);
             sqlCommand.CommandType = CommandType.StoredProcedure;
 
-            sqlCommand.Parameters.AddWithValue("@text", word.Text);
-            sqlCommand.Parameters.AddWithValue("@translation", word.Translation);
-            sqlCommand.Parameters.AddWithValue("@example1", (object)word.Example1 ?? DBNull.Value);
-            sqlCommand.Parameters.AddWithValue("@example2", (object)word.Example2 ?? DBNull.Value);
-            sqlCommand.Parameters.AddWithValue("@example3", (object)word.Example3 ?? DBNull.Value);
+            sqlCommand.Parameters.AddWithValue("@Text", word.Text);
+            sqlCommand.Parameters.AddWithValue("@Transcription", (object)word.Transcription ?? DBNull.Value);
+            sqlCommand.Parameters.AddWithValue("@Translation", word.Translation);
+            sqlCommand.Parameters.AddWithValue("@Examples", word.Examples);
+            sqlCommand.Parameters.AddWithValue("@ExamplesTranslation", word.ExamplesTranslation);
 
             sqlCommand.ExecuteNonQuery();
 
@@ -246,11 +246,11 @@ namespace MFDictionary.Services
                 Word word = new Word();
 
                 word.Id = (int)reader["Id"];
-                word.Text = (string)reader["Text"];
-                word.Translation = (string)reader["Translation"];
-                word.Example1 = reader["Example1"]?.ToString() ?? String.Empty;
-                word.Example2 = reader["Example2"]?.ToString() ?? String.Empty;
-                word.Example3 = reader["Example3"]?.ToString() ?? String.Empty;
+                word.Text = reader["Text"].ToString();
+                word.Transcription = reader["Transcription"]?.ToString() ?? String.Empty;
+                word.Translation = reader["Translation"].ToString().Split(' ').ToList();
+                word.Examples = reader["Examples"]?.ToString().Split(' ').ToList();
+                word.ExamplesTranslation = reader["ExamplesTranslation"]?.ToString().Split(' ').ToList();
 
                 words.Add(word);
             }

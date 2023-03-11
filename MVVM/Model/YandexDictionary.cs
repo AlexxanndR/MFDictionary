@@ -20,6 +20,7 @@ namespace MFDictionary.MVVM.Model
     {
         public string text { get; set; }
         public string pos { get; set; }
+        public string ts { get; set; }
         public string gen { get; set; }
         public string anm { get; set; }
         public Tr[] tr { get; set; }
