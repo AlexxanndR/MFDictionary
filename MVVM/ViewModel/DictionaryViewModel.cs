@@ -59,9 +59,9 @@ namespace MFDictionary.MVVM.ViewModel
         {
             get
             {
-                return new RelayCommand((loaded) =>
+                return new RelayCommand(async (loaded) =>
                 {
-                    WordsList = _wordsDboAdapter.GetAll();
+                    WordsList = await _wordsDboAdapter.GetAllAsync();
                 });
             }
         }

@@ -95,15 +95,15 @@
 
             <StackPanel Orientation="Vertical" 
                         HorizontalAlignment="Center" Margin="0 0 0 10">
-                <TextBox Tag="Examples"
+                <TextBox Tag="Examples" AcceptsReturn="true"
                          HorizontalAlignment="Center" TextWrapping="Wrap"
                          Width="1000" Height="Auto" MaxHeight="150"
-                         Text="{Binding Examples, UpdateSourceTrigger=LostFocus}"
+                         Text="{Binding Example, UpdateSourceTrigger=LostFocus}"
                          Style="{StaticResource CustomTextBox}"/>
-                <TextBox Tag="Examples translation" TextWrapping="Wrap"
-                         HorizontalAlignment="Center"
+                <TextBox Tag="Examples translation" AcceptsReturn="true"
+                         HorizontalAlignment="Center" TextWrapping="Wrap"
                          Width="1000" Height="Auto" MaxHeight="150"
-                         Text="{Binding ExamplesTraslation, UpdateSourceTrigger=LostFocus}"
+                         Text="{Binding ExampleTraslation, UpdateSourceTrigger=LostFocus}"
                          Style="{StaticResource CustomTextBox}"/>
             </StackPanel>
         </StackPanel>

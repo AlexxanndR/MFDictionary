@@ -149,9 +149,9 @@ namespace MFDictionary.MVVM.ViewModel
             }
         }
 
-        private ObservableCollection<string> _examples;
+        private string _examples;
 
-        public ObservableCollection<string> Examples
+        public string Examples
         {
             get { return _examples; }
             set
@@ -161,11 +161,11 @@ namespace MFDictionary.MVVM.ViewModel
             }
         }
 
-        private ObservableCollection<string> _examplesTranslation;
+        private string _examplesTranslation;
 
-        public ObservableCollection<string> ExamplesTranslation
+        public string ExamplesTranslation
         {
-            get { return _examplesTranslation; }
+            get { return _examplesTranslation; ; }
             set
             {
                 _examplesTranslation = value;
@@ -186,19 +186,45 @@ namespace MFDictionary.MVVM.ViewModel
         {
             var langs = await _yandexService.GetLangsAsync();
 
-            foreach (var lang in langs)
+            await Task.Run(() =>
             {
-                var from = _langsShortForm[lang.Split('-')[0]];
-                var to = _langsShortForm[lang.Split('-')[1]];
-
-                if (_langsRatio.ContainsKey(from) == true)
-                    _langsRatio[from].Add(to);
-                else
+                try
                 {
-                    LangsFrom.Add(from);
-                    _langsRatio.Add(from, new List<string> { to });
+                    foreach (var lang in langs)
+                    {
+                        var from = _langsShortForm[lang.Split('-')[0]];
+                        var to = _langsShortForm[lang.Split('-')[1]];
+
+                        if (_langsRatio.ContainsKey(from) == true)
+                            _langsRatio[from].Add(to);
+                        else
+                        {
+                            LangsFrom.Add(from);
+                            _langsRatio.Add(from, new List<string> { to });
+                        }
+                    }
+                } 
+                catch (Exception ex) 
+                {
+                    //TO DO
                 }
-            }
+            });
+        }
+
+        private List<string> ParseExamples()
+        {
+            if (!String.IsNullOrEmpty(Examples))
+                return null;
+
+            return new List<string>(Examples.Split(new string[] { " ", "\r\n" }, StringSplitOptions.RemoveEmptyEntries));
+        }
+
+        private List<string> ParseExamplesTranslation()
+        {
+            if (!String.IsNullOrEmpty(ExamplesTranslation))
+                return null;
+
+            return new List<string>(ExamplesTranslation.Split(new string[] { " ", "\r\n" }, StringSplitOptions.RemoveEmptyEntries));
         }
 
         public RelayCommand WindowLoadedCommand
@@ -242,13 +268,18 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 return new RelayCommand((obj) =>
                 {
+                    if (String.IsNullOrWhiteSpace(TranslatableWord) || String.IsNullOrEmpty(Translation))
+                    {
+                        //TO DO
+                    }
+                    
                     _wordsDboAdapter.Insert(new Word
                     {
                         Text = this.TranslatableWord,
                         Transcription = this.Transcription,
                         Translation = this.Translations.ToList(),
-                        Examples = this.Examples.ToList(),
-                        ExamplesTranslation = this.ExamplesTranslation.ToList()
+                        Examples = this.ParseExamples(),
+                        ExamplesTranslation = this.ParseExamplesTranslation()
                     });
 
                     foreach (Window window in Application.Current.Windows)
@@ -307,19 +338,13 @@ namespace MFDictionary.MVVM.ViewModel
 
                     if (word != null)
                     {
-                        /*                        if (WordsList.Any(x => x.Text == word.Text && x.Translation == word.Translation))
-                                                {
-                                                    messageBoxResult = MessageBox.Show("Oops! The word '" + SearchWord + "' has already been added to the dictionary!", "Warning",
-                                                                                       MessageBoxButton.OK, MessageBoxImage.Warning,
-                                                                                       MessageBoxResult.OK, MessageBoxOptions.None);
-                                                    return;
-                                                }*/
+                        //TO DO: CHECK DATABASE
 
                         TranslatableWord = word.Text;
                         Transcription = word?.Transcription;
                         Translations = new ObservableCollection<string>(word.Translation);
-                        Examples = new ObservableCollection<string>(word.Examples);
-                        ExamplesTranslation = new ObservableCollection<string>(word.ExamplesTranslation);
+                        Examples = Enumerable.Range(0, word.Examples.Count).Select(i => String.Format("{0}. {1}\r\n", i, word.Examples[i])).ToString();
+                        ExamplesTranslation = Enumerable.Range(0, word.ExamplesTranslation.Count).Select(i => String.Format("{0}. {1}\r\n", i, word.ExamplesTranslation[i])).ToString();
                     }
                 });
             }

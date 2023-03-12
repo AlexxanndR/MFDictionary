@@ -164,30 +164,33 @@ namespace MFDictionary.Services
             return isCreated;
         }
 
-        public ObservableCollection<Word> GetAll()
+        public async Task<ObservableCollection<Word>> GetAllAsync()
         {
-            _sqlConnection.Open();
-
             ObservableCollection<Word> words = new ObservableCollection<Word>();
 
-            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Words", _sqlConnection);
-
-            SqlDataReader reader = sqlCommand.ExecuteReader();
-            while (reader.Read())
+            await Task.Run(() =>
             {
-                Word word = new Word();
+                _sqlConnection.Open();
 
-                word.Id = (int)reader["Id"];
-                word.Text = reader["Text"].ToString();
-                word.Transcription = reader["Transcription"].ToString() ?? String.Empty;
-                word.Translation = reader["Translation"].ToString().Split(' ').ToList();
-                word.Examples = reader["Examples"]?.ToString().Split(' ').ToList();
-                word.ExamplesTranslation = reader["ExamplesTranslation"]?.ToString().Split(' ').ToList();
+                SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Words", _sqlConnection);
 
-                words.Add(word);
-            }
+                SqlDataReader reader = sqlCommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    Word word = new Word();
 
-            _sqlConnection.Close();
+                    word.Id = (int)reader["Id"];
+                    word.Text = reader["Text"].ToString();
+                    word.Transcription = reader["Transcription"].ToString() ?? String.Empty;
+                    word.Translation = reader["Translation"].ToString().Split(' ').ToList();
+                    word.Examples = reader["Examples"]?.ToString().Split(' ').ToList();
+                    word.ExamplesTranslation = reader["ExamplesTranslation"]?.ToString().Split(' ').ToList();
+
+                    words.Add(word);
+                }
+
+                _sqlConnection.Close();
+            });
 
             return words;
         }
@@ -201,9 +204,13 @@ namespace MFDictionary.Services
 
             sqlCommand.Parameters.AddWithValue("@Text", word.Text);
             sqlCommand.Parameters.AddWithValue("@Transcription", (object)word.Transcription ?? DBNull.Value);
-            sqlCommand.Parameters.AddWithValue("@Translation", word.Translation);
-            sqlCommand.Parameters.AddWithValue("@Examples", word.Examples);
-            sqlCommand.Parameters.AddWithValue("@ExamplesTranslation", word.ExamplesTranslation);
+
+            string translation = String.Join(" ", word.Translation);
+            sqlCommand.Parameters.AddWithValue("@Translation", translation);
+            string examples = String.Join(" ", word.Examples ?? new List<string> { });
+            sqlCommand.Parameters.AddWithValue("@Examples", (object)examples ?? DBNull.Value);
+            string examplesTranslation = String.Join(" ", word.ExamplesTranslation ?? new List<string> { });
+            sqlCommand.Parameters.AddWithValue("@ExamplesTranslation", (object)examplesTranslation ?? DBNull.Value);
 
             sqlCommand.ExecuteNonQuery();
 
