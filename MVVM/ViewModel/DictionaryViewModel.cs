@@ -16,7 +16,8 @@ namespace MFDictionary.MVVM.ViewModel
 {
     internal class DictionaryViewModel : ObservableObject
     {
-        WordsDboAdapter _wordsDboAdapter;
+
+        private  WordsDboAdapter _wordsDboAdapter;
 
         private ObservableCollection<Word> _wordsList;
 
@@ -30,17 +31,7 @@ namespace MFDictionary.MVVM.ViewModel
             }
         }
 
-        private int _selectedWordId;
-
-        public int SelectedWordId
-        {
-            get { return _selectedWordId; }
-            set
-            {
-                _selectedWordId = value;
-                OnPropertyChanged();
-            }
-        }
+        private DataService _dataService;
 
         public DictionaryViewModel()
         {
@@ -72,7 +63,7 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 return new RelayCommand((wordId) =>
                 {
-                    SelectedWordId = (int)wordId;
+                    //_dataService.SelectedId = (int)wordId;
                     NavigateToPage("WordEdit");
                 });
             }
@@ -84,7 +75,7 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 return new RelayCommand((add) =>
                 {
-                    SelectedWordId = -1;
+                   // _dataService.SelectedId = -1;
                     NavigateToPage("WordEdit");
                 });
             }

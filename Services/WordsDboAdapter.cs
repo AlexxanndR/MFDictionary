@@ -207,9 +207,9 @@ namespace MFDictionary.Services
 
             string translation = String.Join(" ", word.Translation);
             sqlCommand.Parameters.AddWithValue("@Translation", translation);
-            string examples = String.Join(" ", word.Examples ?? new List<string> { });
+            string examples = word.Examples != null ? String.Join(" ", word.Examples) : String.Empty;
             sqlCommand.Parameters.AddWithValue("@Examples", (object)examples ?? DBNull.Value);
-            string examplesTranslation = String.Join(" ", word.ExamplesTranslation ?? new List<string> { });
+            string examplesTranslation = word.ExamplesTranslation != null ? String.Join(" ", word.ExamplesTranslation) : String.Empty;
             sqlCommand.Parameters.AddWithValue("@ExamplesTranslation", (object)examplesTranslation ?? DBNull.Value);
 
             sqlCommand.ExecuteNonQuery();

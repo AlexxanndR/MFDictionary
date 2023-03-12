@@ -1,4 +1,6 @@
-﻿using MFDictionary.Core;
+﻿using MessageBox.Avalonia.DTO;
+using MessageBox.Avalonia.Enums;
+using MFDictionary.Core;
 using MFDictionary.Helpers;
 using MFDictionary.MVVM.Model;
 using MFDictionary.Services;
@@ -7,7 +9,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -17,7 +18,7 @@ namespace MFDictionary.MVVM.ViewModel
     {
         private YandexService _yandexService;
 
-        WordsDboAdapter _wordsDboAdapter;
+        private WordsDboAdapter _wordsDboAdapter;
 
         private Dictionary<string, string> _langsShortForm = new Dictionary<string, string>()
         {
@@ -173,6 +174,8 @@ namespace MFDictionary.MVVM.ViewModel
             }
         }
 
+        private DataService _dataService;
+
         public WordEditViewModel()
         {
             _wordsDboAdapter = new WordsDboAdapter();
@@ -180,6 +183,7 @@ namespace MFDictionary.MVVM.ViewModel
             _langsRatio = new Dictionary<string, List<string>>();
             _langsFrom = new List<string>();
             _langsTo = new List<string>();
+            _translations = new ObservableCollection<string>();
         }
 
         private async Task Init()
@@ -208,12 +212,17 @@ namespace MFDictionary.MVVM.ViewModel
                 {
                     //TO DO
                 }
+
+/*                if (_dataService.SelectedId >= 0)
+                {
+
+                }*/
             });
         }
 
         private List<string> ParseExamples()
         {
-            if (!String.IsNullOrEmpty(Examples))
+            if (String.IsNullOrEmpty(Examples))
                 return null;
 
             return new List<string>(Examples.Split(new string[] { " ", "\r\n" }, StringSplitOptions.RemoveEmptyEntries));
@@ -221,7 +230,7 @@ namespace MFDictionary.MVVM.ViewModel
 
         private List<string> ParseExamplesTranslation()
         {
-            if (!String.IsNullOrEmpty(ExamplesTranslation))
+            if (String.IsNullOrEmpty(ExamplesTranslation))
                 return null;
 
             return new List<string>(ExamplesTranslation.Split(new string[] { " ", "\r\n" }, StringSplitOptions.RemoveEmptyEntries));
@@ -241,8 +250,8 @@ namespace MFDictionary.MVVM.ViewModel
                     {
                         if (ex.InnerException is HttpRequestException)
                         {
-                            MessageBox.Show("Oops! No internet connection.", "Warning", MessageBoxButton.OK,
-                                            MessageBoxImage.Warning, MessageBoxResult.OK, MessageBoxOptions.None);
+/*                            MessageBox.Show("Oops! No internet connection.", "Warning", MessageBoxButton.OK,
+                                            MessageBoxImage.Warning, MessageBoxResult.OK, MessageBoxOptions.None);*/
                         }
                     }
                 });
@@ -268,11 +277,21 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 return new RelayCommand((obj) =>
                 {
-                    if (String.IsNullOrWhiteSpace(TranslatableWord) || String.IsNullOrEmpty(Translation))
+/*                    if (String.IsNullOrWhiteSpace(TranslatableWord) || String.IsNullOrEmpty(Translation))
                     {
-                        //TO DO
-                    }
-                    
+                        var messageBox = MessageBox.Avalonia.MessageBoxManager.GetMessageBoxStandardWindow(
+                                                        new MessageBoxStandardParams
+                                                        {
+                                                            WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterOwner,
+                                                            ButtonDefinitions = ButtonEnum.Ok,
+                                                            ContentTitle = "Error",
+                                                            ContentHeader = "Attention!",
+                                                            ContentMessage = "There is no word to add.",
+                                                            Icon = Icon.Error
+                                                        });
+                        messageBox.Show();
+                    }*/
+
                     _wordsDboAdapter.Insert(new Word
                     {
                         Text = this.TranslatableWord,
@@ -343,8 +362,12 @@ namespace MFDictionary.MVVM.ViewModel
                         TranslatableWord = word.Text;
                         Transcription = word?.Transcription;
                         Translations = new ObservableCollection<string>(word.Translation);
-                        Examples = Enumerable.Range(0, word.Examples.Count).Select(i => String.Format("{0}. {1}\r\n", i, word.Examples[i])).ToString();
-                        ExamplesTranslation = Enumerable.Range(0, word.ExamplesTranslation.Count).Select(i => String.Format("{0}. {1}\r\n", i, word.ExamplesTranslation[i])).ToString();
+                        Examples = word.Examples.Count != 0 ? Enumerable.Range(0, word.Examples.Count)
+                                                                        .Select(i => String.Format("{0}. {1}\r\n", i, word.Examples[i]))
+                                                                        .ToString() : String.Empty;
+                        ExamplesTranslation = word.ExamplesTranslation.Count != 0 ? Enumerable.Range(0, word.ExamplesTranslation.Count)
+                                                                                              .Select(i => String.Format("{0}. {1}\r\n", i, word.ExamplesTranslation[i]))
+                                                                                              .ToString() : String.Empty;
                     }
                 });
             }

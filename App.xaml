@@ -4,14 +4,32 @@
              xmlns:local="clr-namespace:MFDictionary"
              xmlns:viewModel="clr-namespace:MFDictionary.MVVM.ViewModel"
              xmlns:view="clr-namespace:MFDictionary.MVVM.View"
-             StartupUri="MainWindow.xaml">
+             xmlns:materialDesign="https://materialdesigninxaml.net/winfx/xaml/themes"
+             Startup="OnStartup">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="/Templates/ListBoxItemStyle.xaml"/>
                 <ResourceDictionary Source="/Templates/ButtonStyle.xaml"/>
                 <ResourceDictionary Source="/Templates/TextBoxStyle.xaml"/>
-                <ResourceDictionary Source="/Templates/Colors.xaml"/>
+                
+                <ResourceDictionary>
+                    <SolidColorBrush x:Key="LightGreen" Color="#C8FFED"/>
+                    <SolidColorBrush x:Key="MiddleGreen" Color="#8AFFD9"/>
+                    <SolidColorBrush x:Key="DarkGreen" Color="#00FFAC"/>
+                </ResourceDictionary>
+                <ResourceDictionary>
+                    <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#00FFAC"/>
+                    <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="Black"/>
+                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#00CC8A"/>
+                    <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="Black"/>
+                    <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="#009263"/>
+                    <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="Black"/>
+                    <SolidColorBrush x:Key="SecondaryAccentBrush" Color="Yellow"/>
+                    <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="Black"/>
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type viewModel:DictionaryViewModel}">

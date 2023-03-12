@@ -3,12 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:mde="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:MFDictionary"
         xmlns:viewmodel="clr-namespace:MFDictionary.MVVM.ViewModel"
         mc:Ignorable="d"
         Title="MFDictionary" Icon="Icons/app_icon.png" Height="670" Width="1180"
-        WindowStartupLocation="CenterScreen" ResizeMode="CanResize">
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.DataContext>
         <viewmodel:MainViewModel/>
     </Window.DataContext>

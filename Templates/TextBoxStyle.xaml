@@ -9,8 +9,8 @@
                         <Grid>
                             <Rectangle Fill="Transparent"
                                        RadiusX="10" RadiusY="5"
-                                       Stroke="Black" StrokeThickness="1">
-                            </Rectangle>
+                                       Stroke="Black" StrokeThickness="1"/>
+
                             <TextBox x:Name="SearchBox" Margin="1" Padding="5"
                                      Text="{Binding Path=Text, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                      TextWrapping="{Binding Path=TextWrapping, RelativeSource={RelativeSource Mode=TemplatedParent}}"
@@ -19,6 +19,7 @@
                                      FontSize="20" FontFamily="Oswald Light"
                                      Background="Transparent" Foreground="Black"
                                      VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
+                            
                             <TextBlock Text= "{Binding Path=Tag, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                        IsHitTestVisible="False"
                                        VerticalAlignment="Center" HorizontalAlignment="Left"

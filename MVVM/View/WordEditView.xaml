@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:local="clr-namespace:MFDictionary.MVVM.View"
+             xmlns:mde="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewmodel="clr-namespace:MFDictionary.MVVM.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="630" d:DesignWidth="1180">
@@ -47,31 +47,34 @@
         <StackPanel Grid.Row="1"
                     Orientation="Vertical" Margin="10 20" Grid.RowSpan="2">
             <Grid Margin="0 0 0 10">
-                <TextBox Tag="Word"
+                <TextBox mde:HintAssist.Hint="Word"
+                         FontFamily="Oswald Light" FontSize="20"
                          HorizontalAlignment="Left"
                          Width="570"
                          Text="{Binding TranslatableWord, UpdateSourceTrigger=LostFocus}"
-                         Style="{StaticResource CustomTextBox}">
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="LostFocus">
                             <i:InvokeCommandAction Command="{Binding SearchWordCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </TextBox>
-                <TextBox Tag="Transcription"
+                <TextBox mde:HintAssist.Hint="Transcription"
+                         FontFamily="Oswald Light" FontSize="20"
                          HorizontalAlignment="Right"
                          Width="570"
                          Text="{Binding Transcription, UpdateSourceTrigger=LostFocus}"
-                         Style="{StaticResource CustomTextBox}"/>
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
             </Grid>
             
             <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Center" Margin="0 0 0 10">
-                <TextBox Tag="Translation"
+                <TextBox mde:HintAssist.Hint="Translation"
+                         FontFamily="Oswald Light" FontSize="20"
                          HorizontalAlignment="Center"
                          Width="570"
                          Text="{Binding Translation, UpdateSourceTrigger=LostFocus}"
-                         Style="{StaticResource CustomTextBox}"/>
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
                 <Button HorizontalAlignment="Left"
                         Style="{StaticResource AcceptButtonStyle}"
                         Command="{Binding AddTranslationCommand}">
@@ -95,27 +98,29 @@
 
             <StackPanel Orientation="Vertical" 
                         HorizontalAlignment="Center" Margin="0 0 0 10">
-                <TextBox Tag="Examples" AcceptsReturn="true"
+                <TextBox mde:HintAssist.Hint="Examples" AcceptsReturn="true"
+                         FontFamily="Oswald Light" FontSize="20"
                          HorizontalAlignment="Center" TextWrapping="Wrap"
-                         Width="1000" Height="Auto" MaxHeight="150"
-                         Text="{Binding Example, UpdateSourceTrigger=LostFocus}"
-                         Style="{StaticResource CustomTextBox}"/>
-                <TextBox Tag="Examples translation" AcceptsReturn="true"
+                         Width="1150" Height="150"
+                         Text="{Binding Examples, UpdateSourceTrigger=LostFocus}"
+                         Style="{StaticResource MaterialDesignFilledTextBox}"/>
+                <TextBox mde:HintAssist.Hint="Examples translation" AcceptsReturn="true"
+                         FontFamily="Oswald Light" FontSize="20"
                          HorizontalAlignment="Center" TextWrapping="Wrap"
-                         Width="1000" Height="Auto" MaxHeight="150"
-                         Text="{Binding ExampleTraslation, UpdateSourceTrigger=LostFocus}"
-                         Style="{StaticResource CustomTextBox}"/>
+                         Width="1150" Height="150"
+                         Text="{Binding ExamplesTraslation, UpdateSourceTrigger=LostFocus}"
+                         Style="{StaticResource MaterialDesignFilledTextBox}"/>
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="2" 
                     Orientation="Horizontal" HorizontalAlignment="Center">
-
-            <ComboBox FontFamily="Agency FB" FontSize="20" 
-                      Width="150" Height="25" Margin="20 0 10 0"
+            <ComboBox FontFamily="Agency FB" FontSize="18" 
+                      Width="150" Height="30" Margin="0 0 20 0"
                       VerticalAlignment="Center" HorizontalAlignment="Center"
                       IsEditable="true"
-                      ItemsSource="{Binding LangsFrom}" SelectedValue="{Binding LangFrom, UpdateSourceTrigger=PropertyChanged}">
+                      ItemsSource="{Binding LangsFrom}" SelectedValue="{Binding LangFrom, UpdateSourceTrigger=PropertyChanged}"
+                      Style="{StaticResource MaterialDesignComboBox}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding LangFromChangedCommand}"/>
@@ -125,11 +130,12 @@
 
             <Image Source="../../Icons/arrow_icon.png" Width="80"/>
 
-            <ComboBox FontFamily="Agency FB" FontSize="20" 
-                      Width="150" Height="25" Margin="20 0 10 0"
+            <ComboBox FontFamily="Agency FB" FontSize="18" 
+                      Width="150" Height="30" Margin="20 0 10 0"
                       VerticalAlignment="Center" HorizontalAlignment="Center"
                       IsEditable="true"
-                      ItemsSource="{Binding LangsTo}" SelectedValue="{Binding LangTo, UpdateSourceTrigger=PropertyChanged}"/>
+                      ItemsSource="{Binding LangsTo}" SelectedValue="{Binding LangTo, UpdateSourceTrigger=PropertyChanged}"
+                      Style="{StaticResource MaterialDesignComboBox}"/>
         </StackPanel>
 
     </Grid>

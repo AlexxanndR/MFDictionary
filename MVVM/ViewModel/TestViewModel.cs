@@ -49,7 +49,7 @@ namespace MFDictionary.MVVM.ViewModel
 
         private void Init()
         {
-            MessageBoxResult messageBoxResult = MessageBoxResult.None;
+/*            MessageBoxResult messageBoxResult = MessageBoxResult.None;
 
             long recordsCount = _wordsDboAdapter.GetRecordsCount();
 
@@ -61,8 +61,8 @@ namespace MFDictionary.MVVM.ViewModel
             if (messageBoxResult == MessageBoxResult.OK)
                 return;
 
-            List<Word> words = _wordsDboAdapter.GetRandomWords(10);          
-/*            foreach (Word word in words)
+            List<Word> words = _wordsDboAdapter.GetRandomWords(10);
+            foreach (Word word in words)
                 TestWordsList.Add(word.GetTestWord());*/
         }
 
@@ -77,7 +77,7 @@ namespace MFDictionary.MVVM.ViewModel
             }
         }
 
-        public RelayCommand GetResultCommand
+/*        public RelayCommand GetResultCommand
         {
             get
             {
@@ -112,7 +112,7 @@ namespace MFDictionary.MVVM.ViewModel
                                     MessageBoxResult.OK, MessageBoxOptions.None);
                 });
             }
-        }
+        }*/
 
     }
 }
