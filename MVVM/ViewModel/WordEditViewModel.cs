@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -190,7 +191,7 @@ namespace MFDictionary.MVVM.ViewModel
         {
             var langs = await _yandexService.GetLangsAsync();
 
-            await Task.Run(async () =>
+            await Task.Run(() =>
             {
                 try
                 {
@@ -212,17 +213,17 @@ namespace MFDictionary.MVVM.ViewModel
                 {
                     //TO DO
                 }
-
-                if (ApplicationContext.SelectedId >= 0)
-                {
-                    Word word = await _wordsDboAdapter.GetByIdAsync(ApplicationContext.SelectedId);
-                    TranslatableWord = word.Text;
-                    Transcription = word?.Transcription;
-                    Translations = new ObservableCollection<string>(word.Translation);
-                    Examples = word.Examples.Count != 0 ? String.Join("\n", word.Examples) : String.Empty;
-                    ExamplesTranslation = word.ExamplesTranslation.Count != 0 ? String.Join("\n", word.ExamplesTranslation) : String.Empty;
-                }
             });
+
+            if (ApplicationContext.SelectedId >= 0)
+            {
+                Word word = await _wordsDboAdapter.GetByIdAsync(ApplicationContext.SelectedId);
+                TranslatableWord = word.Text;
+                Transcription = word?.Transcription;
+                Translations = new ObservableCollection<string>(word.Translation);
+                Examples = word.Examples.Count != 0 ? String.Join("\n", word.Examples) : String.Empty;
+                ExamplesTranslation = word.ExamplesTranslation.Count != 0 ? String.Join("\n", word.ExamplesTranslation) : String.Empty;
+            }
         }
 
         private List<string> ParseExamples()
@@ -230,7 +231,7 @@ namespace MFDictionary.MVVM.ViewModel
             if (String.IsNullOrEmpty(Examples))
                 return null;
 
-            return new List<string>(Examples.Split(new string[] { " ", "\r\n" }, StringSplitOptions.RemoveEmptyEntries));
+            return new List<string>(Examples.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries));
         }
 
         private List<string> ParseExamplesTranslation()
@@ -238,7 +239,7 @@ namespace MFDictionary.MVVM.ViewModel
             if (String.IsNullOrEmpty(ExamplesTranslation))
                 return null;
 
-            return new List<string>(ExamplesTranslation.Split(new string[] { " ", "\r\n" }, StringSplitOptions.RemoveEmptyEntries));
+            return new List<string>(ExamplesTranslation.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries));
         }
 
         public RelayCommand WindowLoadedCommand
@@ -255,8 +256,25 @@ namespace MFDictionary.MVVM.ViewModel
                     {
                         if (ex.InnerException is HttpRequestException)
                         {
-/*                            MessageBox.Show("Oops! No internet connection.", "Warning", MessageBoxButton.OK,
-                                            MessageBoxImage.Warning, MessageBoxResult.OK, MessageBoxOptions.None);*/
+                            CustomMaterialMessageBox msg = new CustomMaterialMessageBox
+                            {
+                                FontFamily = new FontFamily("Oswald Light"),
+                                TxtMessage = 
+                                {
+                                    Text = "No internet connection!", 
+                                    Foreground = Brushes.Black, FontSize = 20,
+                                    VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center
+                                },
+                                TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
+                                BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black },
+                                BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black },
+                                MainContentControl = { Background = Brushes.White },
+                                TitleBackgroundPanel = { Background = Brushes.MistyRose },
+                                BorderThickness = new Thickness(0),
+
+                                WindowStyle = WindowStyle.None
+                            };
+                            msg.Show();
                         }
                     }
                 });
@@ -269,9 +287,31 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 return new RelayCommand((obj) =>
                 {
-                    foreach (Window window in Application.Current.Windows)
-                        if (window.GetType() == typeof(MainWindow))
-                            (window as MainWindow).MainWindowFrame.Navigate(new Uri(string.Format("MVVM/View/DictionaryView.xaml"), UriKind.RelativeOrAbsolute));
+                    CustomMaterialMessageBox msg = new CustomMaterialMessageBox
+                    {
+                        FontFamily = new FontFamily("Oswald Light"),
+                        TxtMessage = { 
+                            Text = "Data won't be save! Are you sure?", 
+                            Foreground = Brushes.Black, FontSize = 20,
+                            VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center
+                        },
+                        TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
+                        BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black},
+                        BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
+                        MainContentControl = { Background = Brushes.White },
+                        TitleBackgroundPanel = { Background = Brushes.MistyRose },
+                        BorderThickness = new Thickness(0),
+                        
+                        WindowStyle = WindowStyle.None
+                    };
+                    msg.Show();
+
+                    if (msg.Result == MessageBoxResult.OK)
+                    {
+                        foreach (Window window in Application.Current.Windows)
+                            if (window.GetType() == typeof(MainWindow))
+                                (window as MainWindow).MainWindowFrame.Navigate(new Uri(string.Format("MVVM/View/DictionaryView.xaml"), UriKind.RelativeOrAbsolute));
+                    }
                 });
             }
         }
@@ -280,46 +320,68 @@ namespace MFDictionary.MVVM.ViewModel
         {
             get
             {
-                return new RelayCommand((obj) =>
+                return new RelayCommand(async (obj) =>
                 {
-                    if (String.IsNullOrWhiteSpace(TranslatableWord) || String.IsNullOrEmpty(Translation))
+                    if (String.IsNullOrWhiteSpace(TranslatableWord) || Translations.Count == 0)
                     {
                         CustomMaterialMessageBox msg = new CustomMaterialMessageBox
                         {
                             TxtMessage = { Text = "Oops! There is no word to add!", Foreground = Brushes.Black, FontSize = 20 },
-                            TxtTitle = { Text = "Error", Foreground = Brushes.Black },
-                            BtnOk = { Content = "Ok", Background = Brushes.LightGreen },
+                            TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
+                            BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black },
+                            BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black },
                             MainContentControl = { Background = Brushes.White },
                             TitleBackgroundPanel = { Background = Brushes.MistyRose },
                             BorderThickness = new Thickness(0),
                             FontFamily = new FontFamily("Oswald Light"),
-                            WindowStyle = WindowStyle.None
+                            WindowStyle = WindowStyle.None,
                         };
                         msg.Show();
                         return;
                     }
 
+                    Word word = new Word
+                    {
+                        Text = this.TranslatableWord,
+                        Transcription = this.Transcription,
+                        Translation = this.Translations.ToList(),
+                        Examples = this.ParseExamples(),
+                        ExamplesTranslation = this.ParseExamplesTranslation()
+                    };
+
+
                     if (ApplicationContext.SelectedId >= 0)
                     {
-
-                    } 
-                    else
+                        word.Id = ApplicationContext.SelectedId;
+                        await _wordsDboAdapter.UpdateAsync(word);
+                    }
+                    else if (ApplicationContext.SelectedId == -1)
                     {
-                        _wordsDboAdapter.Insert(new Word
+                        bool isWordExist = await _wordsDboAdapter.IsWordExist(word);
+                        if (isWordExist)
                         {
-                            Text = this.TranslatableWord,
-                            Transcription = this.Transcription,
-                            Translation = this.Translations.ToList(),
-                            Examples = this.ParseExamples(),
-                            ExamplesTranslation = this.ParseExamplesTranslation()
-                        });
+                            CustomMaterialMessageBox msg = new CustomMaterialMessageBox
+                            {
+                                FontFamily = new FontFamily("Oswald Light"),
+                                TxtMessage = { Text = "The word already exists in the dictionary!", Foreground = Brushes.Black, FontSize = 20 },
+                                TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
+                                BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black },
+                                BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black },
+                                MainContentControl = { Background = Brushes.White },
+                                TitleBackgroundPanel = { Background = Brushes.MistyRose },
+                                BorderThickness = new Thickness(0),
+                                WindowStyle = WindowStyle.None
+                            };
+                            msg.Show();
+                            return;
+                        }
+
+                        await _wordsDboAdapter.InsertAsync(word);
                     }
 
-
-
                     foreach (Window window in Application.Current.Windows)
-                        if (window.GetType() == typeof(MainWindow))
-                            (window as MainWindow).MainWindowFrame.Navigate(new Uri(string.Format("MVVM/View/DictionaryView.xaml"), UriKind.RelativeOrAbsolute));
+                    if (window.GetType() == typeof(MainWindow))
+                        (window as MainWindow).MainWindowFrame.Navigate(new Uri(string.Format("MVVM/View/DictionaryView.xaml"), UriKind.RelativeOrAbsolute));
                 });
             }
         }
@@ -368,13 +430,41 @@ namespace MFDictionary.MVVM.ViewModel
                     var langFrom = _langsShortForm.FirstOrDefault(x => x.Value == LangFrom).Key;
                     var langTo = _langsShortForm.FirstOrDefault(x => x.Value == LangTo).Key;
 
-                    var wordInfo = await _yandexService.LookupAsync(TranslatableWord, langFrom, langTo);
-                    Word word = wordInfo.DictionaryAnswer?.GetWord();
+                    Word word = null;
+
+                    try
+                    {
+                        var wordInfo = await _yandexService.LookupAsync(TranslatableWord, langFrom, langTo);
+                        word = wordInfo.DictionaryAnswer?.GetWord();
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex.InnerException is HttpRequestException)
+                        {
+                            CustomMaterialMessageBox msg = new CustomMaterialMessageBox
+                            {
+                                FontFamily = new FontFamily("Oswald Light"),
+                                TxtMessage =
+                                {
+                                    Text = "No internet connection!",
+                                    Foreground = Brushes.Black, FontSize = 20,
+                                    VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center
+                                },
+                                TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
+                                BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black },
+                                BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black },
+                                MainContentControl = { Background = Brushes.White },
+                                TitleBackgroundPanel = { Background = Brushes.MistyRose },
+                                BorderThickness = new Thickness(0),
+
+                                WindowStyle = WindowStyle.None
+                            };
+                            msg.Show();
+                        }
+                    }
 
                     if (word != null)
                     {
-                        //TO DO: CHECK DATABASE
-
                         TranslatableWord = word.Text;
                         Transcription = word.Transcription;
                         Translations = new ObservableCollection<string>(word.Translation);

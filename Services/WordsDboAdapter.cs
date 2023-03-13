@@ -32,6 +32,7 @@ namespace MFDictionary.Services
                 CreateDatabase();
                 CreateTable();
                 CreateInsertProcedure();
+                CreateUpdateProcedure();
             }
         }
 
@@ -219,8 +220,8 @@ namespace MFDictionary.Services
                     word.Text = reader["Text"].ToString();
                     word.Transcription = reader["Transcription"].ToString() ?? String.Empty;
                     word.Translation = reader["Translation"].ToString().Split(' ').ToList();
-                    word.Examples = reader["Examples"]?.ToString().Split(' ').ToList();
-                    word.ExamplesTranslation = reader["ExamplesTranslation"]?.ToString().Split(' ').ToList();
+                    word.Examples = reader["Examples"]?.ToString().Split('\n').ToList();
+                    word.ExamplesTranslation = reader["ExamplesTranslation"]?.ToString().Split('\n').ToList();
 
                     words.Add(word);
                 }
@@ -249,8 +250,8 @@ namespace MFDictionary.Services
                     word.Text = reader["Text"].ToString();
                     word.Transcription = reader["Transcription"].ToString() ?? String.Empty;
                     word.Translation = reader["Translation"].ToString().Split(' ').ToList();
-                    word.Examples = reader["Examples"]?.ToString().Split(' ').ToList();
-                    word.ExamplesTranslation = reader["ExamplesTranslation"]?.ToString().Split(' ').ToList();
+                    word.Examples = reader["Examples"]?.ToString().Split('\n').ToList();
+                    word.ExamplesTranslation = reader["ExamplesTranslation"]?.ToString().Split('\n').ToList();
                 }
 
                 _sqlConnection.Close();
@@ -259,26 +260,76 @@ namespace MFDictionary.Services
             return word;
         }
 
-        public void Insert(Word word)
+        public async Task<bool> IsWordExist(Word word)
         {
-            _sqlConnection.Open();
+            bool isExist = false;
 
-            SqlCommand sqlCommand = new SqlCommand("sp_InsertWord", _sqlConnection);
-            sqlCommand.CommandType = CommandType.StoredProcedure;
+            await Task.Run(() =>
+            {
+                _sqlConnection.Open();
 
-            sqlCommand.Parameters.AddWithValue("@Text", word.Text);
-            sqlCommand.Parameters.AddWithValue("@Transcription", (object)word.Transcription ?? DBNull.Value);
+                string wordTranslation = String.Join(" ", word.Translation);
+                string query = String.Format("SELECT * FROM Words WHERE Text='{0}' AND Translation='{1}'", word.Text, wordTranslation);
+                SqlCommand sqlCommand = new SqlCommand(query, _sqlConnection);
 
-            string translation = String.Join(" ", word.Translation);
-            sqlCommand.Parameters.AddWithValue("@Translation", translation);
-            string examples = word.Examples != null ? String.Join(" ", word.Examples) : String.Empty;
-            sqlCommand.Parameters.AddWithValue("@Examples", (object)examples ?? DBNull.Value);
-            string examplesTranslation = word.ExamplesTranslation != null ? String.Join(" ", word.ExamplesTranslation) : String.Empty;
-            sqlCommand.Parameters.AddWithValue("@ExamplesTranslation", (object)examplesTranslation ?? DBNull.Value);
+                SqlDataReader reader = sqlCommand.ExecuteReader();
+                isExist = reader.HasRows ? isExist = true : isExist = false; 
 
-            sqlCommand.ExecuteNonQuery();
+                _sqlConnection.Close();
+            });
 
-            _sqlConnection.Close();
+            return isExist;
+        }
+
+        public async Task InsertAsync(Word word)
+        {
+            await Task.Run(() =>
+            {
+                _sqlConnection.Open();
+
+                SqlCommand sqlCommand = new SqlCommand("sp_InsertWord", _sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                sqlCommand.Parameters.AddWithValue("@Text", word.Text);
+                sqlCommand.Parameters.AddWithValue("@Transcription", (object)word.Transcription ?? DBNull.Value);
+
+                string translation = String.Join(" ", word.Translation);
+                sqlCommand.Parameters.AddWithValue("@Translation", translation);
+                string examples = word.Examples != null ? String.Join("\n", word.Examples) : String.Empty;
+                sqlCommand.Parameters.AddWithValue("@Examples", (object)examples ?? DBNull.Value);
+                string examplesTranslation = word.ExamplesTranslation != null ? String.Join("\n", word.ExamplesTranslation) : String.Empty;
+                sqlCommand.Parameters.AddWithValue("@ExamplesTranslation", (object)examplesTranslation ?? DBNull.Value);
+
+                sqlCommand.ExecuteNonQuery();
+
+                _sqlConnection.Close();
+            });
+        }
+
+        public async Task UpdateAsync(Word word)
+        {
+            await Task.Run(() =>
+            {
+                _sqlConnection.Open();
+
+                SqlCommand sqlCommand = new SqlCommand("sp_UpdateWord", _sqlConnection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                sqlCommand.Parameters.AddWithValue("@Id", word.Id);
+                sqlCommand.Parameters.AddWithValue("@Text", word.Text);
+                sqlCommand.Parameters.AddWithValue("@Transcription", (object)word.Transcription ?? DBNull.Value);
+
+                string translation = String.Join(" ", word.Translation);
+                sqlCommand.Parameters.AddWithValue("@Translation", translation);
+                string examples = word.Examples != null ? String.Join("\n", word.Examples) : String.Empty;
+                sqlCommand.Parameters.AddWithValue("@Examples", (object)examples ?? DBNull.Value);
+                string examplesTranslation = word.ExamplesTranslation != null ? String.Join("\n", word.ExamplesTranslation) : String.Empty;
+                sqlCommand.Parameters.AddWithValue("@ExamplesTranslation", (object)examplesTranslation ?? DBNull.Value);
+
+                sqlCommand.ExecuteNonQuery();
+
+                _sqlConnection.Close();
+            });
         }
 
         public void Delete(long id)

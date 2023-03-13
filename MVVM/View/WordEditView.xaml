@@ -44,74 +44,77 @@
                 Style="{StaticResource RectangleButtonStyle}"
                 Command="{Binding SaveCommand}"/>
 
-        <StackPanel Grid.Row="1"
-                    Orientation="Vertical" Margin="10 20" Grid.RowSpan="2">
-            <Grid Margin="0 0 0 10">
-                <TextBox mde:HintAssist.Hint="Word"
+        <ScrollViewer Grid.Row="1" 
+                      Margin="10 20"
+                      Style="{StaticResource MaterialDesignScrollViewer}">
+            <StackPanel Orientation="Vertical">
+                <Grid Margin="0 0 0 10">
+                    <TextBox mde:HintAssist.Hint="Word"
                          FontFamily="Oswald Light" FontSize="20"
                          HorizontalAlignment="Left"
                          Width="570"
                          Text="{Binding TranslatableWord, UpdateSourceTrigger=LostFocus}"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="LostFocus">
-                            <i:InvokeCommandAction Command="{Binding SearchWordCommand}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </TextBox>
-                <TextBox mde:HintAssist.Hint="Transcription"
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="LostFocus">
+                                <i:InvokeCommandAction Command="{Binding SearchWordCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <TextBox mde:HintAssist.Hint="Transcription"
                          FontFamily="Oswald Light" FontSize="20"
                          HorizontalAlignment="Right"
                          Width="570"
-                         Text="{Binding Transcription, UpdateSourceTrigger=LostFocus}"
+                         Text="{Binding Transcription, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
-            </Grid>
-            
-            <StackPanel Orientation="Horizontal" 
+                </Grid>
+
+                <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Center" Margin="0 0 0 10">
-                <TextBox mde:HintAssist.Hint="Translation"
+                    <TextBox mde:HintAssist.Hint="Translation"
                          FontFamily="Oswald Light" FontSize="20"
                          HorizontalAlignment="Center"
                          Width="570"
-                         Text="{Binding Translation, UpdateSourceTrigger=LostFocus}"
+                         Text="{Binding Translation, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
-                <Button HorizontalAlignment="Left"
+                    <Button HorizontalAlignment="Left"
                         Style="{StaticResource AcceptButtonStyle}"
                         Command="{Binding AddTranslationCommand}">
-                    <BitmapImage UriSource="../../Icons/add_icon.png"/>
-                </Button>
-            </StackPanel>
+                        <BitmapImage UriSource="../../Icons/add_icon.png"/>
+                    </Button>
+                </StackPanel>
 
-            <Grid Margin="0 0 0 10">
-                <ListBox ItemsSource="{Binding Translations}"
+                <Grid Margin="0 0 0 10">
+                    <ListBox ItemsSource="{Binding Translations}"
                          Background="Transparent"
                          BorderThickness="0"
                          ItemContainerStyle="{StaticResource WordsListBoxItem}">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel IsItemsHost="True" Orientation="Horizontal" 
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel IsItemsHost="True" Orientation="Horizontal" 
                                        Width="1100"/>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                </ListBox>
-            </Grid>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
+                </Grid>
 
-            <StackPanel Orientation="Vertical" 
+                <StackPanel Orientation="Vertical" 
                         HorizontalAlignment="Center" Margin="0 0 0 10">
-                <TextBox mde:HintAssist.Hint="Examples" AcceptsReturn="true"
+                    <TextBox mde:HintAssist.Hint="Examples" AcceptsReturn="true"
                          FontFamily="Oswald Light" FontSize="20"
                          HorizontalAlignment="Center" TextWrapping="Wrap"
                          Width="1150" Height="150"
-                         Text="{Binding Examples, UpdateSourceTrigger=LostFocus}"
+                         Text="{Binding Examples, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource MaterialDesignFilledTextBox}"/>
-                <TextBox mde:HintAssist.Hint="Examples translation" AcceptsReturn="true"
+                    <TextBox mde:HintAssist.Hint="Examples translation" AcceptsReturn="true"
                          FontFamily="Oswald Light" FontSize="20"
                          HorizontalAlignment="Center" TextWrapping="Wrap"
                          Width="1150" Height="150"
-                         Text="{Binding ExamplesTraslation, UpdateSourceTrigger=LostFocus}"
+                         Text="{Binding ExamplesTraslation, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource MaterialDesignFilledTextBox}"/>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
+        </ScrollViewer>
 
         <StackPanel Grid.Row="2" 
                     Orientation="Horizontal" HorizontalAlignment="Center">
