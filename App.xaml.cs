@@ -23,7 +23,6 @@ namespace MFDictionary
         private void ConfigureServices(ServiceCollection services)
         {
             services.AddSingleton<MainWindow>();
-            services.AddSingleton<IDataService, DataService>();
         }
 
         private void OnStartup(object sender, StartupEventArgs e)

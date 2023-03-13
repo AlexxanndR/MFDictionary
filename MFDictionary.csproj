@@ -331,8 +331,7 @@
     <Compile Include="MVVM\View\WordEditView.xaml.cs">
       <DependentUpon>WordEditView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\DataService.cs" />
-    <Compile Include="Services\IDataService.cs" />
+    <Compile Include="Services\ApplicationContext.cs" />
     <Compile Include="Services\WordsDboAdapter.cs" />
     <Compile Include="Services\YandexService.cs" />
     <Compile Include="Core\ObservableObject.cs" />

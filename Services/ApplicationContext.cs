@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace MFDictionary.Services
 {
-    public class DataService : IDataService
+    public static class ApplicationContext
     { 
-        public int SelectedId { get; set; }
-        public DataService() { }
+        public static int SelectedId { get; set; }
     }
 }

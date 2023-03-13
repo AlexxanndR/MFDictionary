@@ -1,4 +1,4 @@
-﻿using MessageBox.Avalonia.DTO;
+﻿using BespokeFusion;
 using MessageBox.Avalonia.Enums;
 using MFDictionary.Core;
 using MFDictionary.Helpers;
@@ -11,6 +11,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace MFDictionary.MVVM.ViewModel
 {
@@ -174,8 +176,6 @@ namespace MFDictionary.MVVM.ViewModel
             }
         }
 
-        private DataService _dataService;
-
         public WordEditViewModel()
         {
             _wordsDboAdapter = new WordsDboAdapter();
@@ -190,7 +190,7 @@ namespace MFDictionary.MVVM.ViewModel
         {
             var langs = await _yandexService.GetLangsAsync();
 
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 try
                 {
@@ -213,10 +213,15 @@ namespace MFDictionary.MVVM.ViewModel
                     //TO DO
                 }
 
-/*                if (_dataService.SelectedId >= 0)
+                if (ApplicationContext.SelectedId >= 0)
                 {
-
-                }*/
+                    Word word = await _wordsDboAdapter.GetByIdAsync(ApplicationContext.SelectedId);
+                    TranslatableWord = word.Text;
+                    Transcription = word?.Transcription;
+                    Translations = new ObservableCollection<string>(word.Translation);
+                    Examples = word.Examples.Count != 0 ? String.Join("\n", word.Examples) : String.Empty;
+                    ExamplesTranslation = word.ExamplesTranslation.Count != 0 ? String.Join("\n", word.ExamplesTranslation) : String.Empty;
+                }
             });
         }
 
@@ -277,29 +282,40 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 return new RelayCommand((obj) =>
                 {
-/*                    if (String.IsNullOrWhiteSpace(TranslatableWord) || String.IsNullOrEmpty(Translation))
+                    if (String.IsNullOrWhiteSpace(TranslatableWord) || String.IsNullOrEmpty(Translation))
                     {
-                        var messageBox = MessageBox.Avalonia.MessageBoxManager.GetMessageBoxStandardWindow(
-                                                        new MessageBoxStandardParams
-                                                        {
-                                                            WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterOwner,
-                                                            ButtonDefinitions = ButtonEnum.Ok,
-                                                            ContentTitle = "Error",
-                                                            ContentHeader = "Attention!",
-                                                            ContentMessage = "There is no word to add.",
-                                                            Icon = Icon.Error
-                                                        });
-                        messageBox.Show();
-                    }*/
+                        CustomMaterialMessageBox msg = new CustomMaterialMessageBox
+                        {
+                            TxtMessage = { Text = "Oops! There is no word to add!", Foreground = Brushes.Black, FontSize = 20 },
+                            TxtTitle = { Text = "Error", Foreground = Brushes.Black },
+                            BtnOk = { Content = "Ok", Background = Brushes.LightGreen },
+                            MainContentControl = { Background = Brushes.White },
+                            TitleBackgroundPanel = { Background = Brushes.MistyRose },
+                            BorderThickness = new Thickness(0),
+                            FontFamily = new FontFamily("Oswald Light"),
+                            WindowStyle = WindowStyle.None
+                        };
+                        msg.Show();
+                        return;
+                    }
 
-                    _wordsDboAdapter.Insert(new Word
+                    if (ApplicationContext.SelectedId >= 0)
                     {
-                        Text = this.TranslatableWord,
-                        Transcription = this.Transcription,
-                        Translation = this.Translations.ToList(),
-                        Examples = this.ParseExamples(),
-                        ExamplesTranslation = this.ParseExamplesTranslation()
-                    });
+
+                    } 
+                    else
+                    {
+                        _wordsDboAdapter.Insert(new Word
+                        {
+                            Text = this.TranslatableWord,
+                            Transcription = this.Transcription,
+                            Translation = this.Translations.ToList(),
+                            Examples = this.ParseExamples(),
+                            ExamplesTranslation = this.ParseExamplesTranslation()
+                        });
+                    }
+
+
 
                     foreach (Window window in Application.Current.Windows)
                         if (window.GetType() == typeof(MainWindow))
@@ -360,14 +376,10 @@ namespace MFDictionary.MVVM.ViewModel
                         //TO DO: CHECK DATABASE
 
                         TranslatableWord = word.Text;
-                        Transcription = word?.Transcription;
+                        Transcription = word.Transcription;
                         Translations = new ObservableCollection<string>(word.Translation);
-                        Examples = word.Examples.Count != 0 ? Enumerable.Range(0, word.Examples.Count)
-                                                                        .Select(i => String.Format("{0}. {1}\r\n", i, word.Examples[i]))
-                                                                        .ToString() : String.Empty;
-                        ExamplesTranslation = word.ExamplesTranslation.Count != 0 ? Enumerable.Range(0, word.ExamplesTranslation.Count)
-                                                                                              .Select(i => String.Format("{0}. {1}\r\n", i, word.ExamplesTranslation[i]))
-                                                                                              .ToString() : String.Empty;
+                        Examples = word.Examples.Count != 0 ? String.Join("\n", word.Examples) : String.Empty;
+                        ExamplesTranslation = word.ExamplesTranslation.Count != 0 ? String.Join("\n", word.ExamplesTranslation) : String.Empty;
                     }
                 });
             }

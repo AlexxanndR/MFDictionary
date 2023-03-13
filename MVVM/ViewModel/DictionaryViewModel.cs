@@ -31,8 +31,6 @@ namespace MFDictionary.MVVM.ViewModel
             }
         }
 
-        private DataService _dataService;
-
         public DictionaryViewModel()
         {
             _wordsDboAdapter = new WordsDboAdapter();
@@ -63,7 +61,7 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 return new RelayCommand((wordId) =>
                 {
-                    //_dataService.SelectedId = (int)wordId;
+                    ApplicationContext.SelectedId = (int)wordId;
                     NavigateToPage("WordEdit");
                 });
             }
@@ -75,7 +73,7 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 return new RelayCommand((add) =>
                 {
-                   // _dataService.SelectedId = -1;
+                    ApplicationContext.SelectedId = -1;
                     NavigateToPage("WordEdit");
                 });
             }

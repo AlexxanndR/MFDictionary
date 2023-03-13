@@ -164,6 +164,42 @@ namespace MFDictionary.Services
             return isCreated;
         }
 
+        private bool CreateUpdateProcedure()
+        {
+            bool isCreated = false;
+
+            string query =
+             "CREATE PROCEDURE sp_UpdateWord (" +
+             "@Id INTEGER," +
+             "@Text NVARCHAR(50)," +
+             "@Transcription NVARCHAR(MAX)," +
+             "@Translation NVARCHAR(MAX)," +
+             "@Examples NVARCHAR(MAX)," +
+             "@ExamplesTranslation NVARCHAR(MAX))" +
+             "AS UPDATE Words SET " +
+             "Text=@Text,Transcription=@Transcription,Translation=@Translation,Examples=@Examples,ExamplesTranslation=@ExamplesTranslation " +
+             "WHERE Id=@Id";
+
+            SqlCommand sqlCommand = new SqlCommand(query, _sqlConnection);
+
+            try
+            {
+                _sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
+                isCreated = true;
+            }
+            catch (SqlException e)
+            {
+                isCreated = false;
+            }
+            finally
+            {
+                _sqlConnection.Close();
+            }
+
+            return isCreated;
+        }
+
         public async Task<ObservableCollection<Word>> GetAllAsync()
         {
             ObservableCollection<Word> words = new ObservableCollection<Word>();
@@ -193,6 +229,34 @@ namespace MFDictionary.Services
             });
 
             return words;
+        }
+
+        public async Task<Word> GetByIdAsync(int id)
+        {
+            Word word = new Word();
+
+            await Task.Run(() =>
+            {
+                _sqlConnection.Open();
+
+                string query = String.Format("SELECT * FROM Words WHERE Id = {0}", id);
+                SqlCommand sqlCommand = new SqlCommand(query, _sqlConnection);
+
+                SqlDataReader reader = sqlCommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    word.Id = (int)reader["Id"];
+                    word.Text = reader["Text"].ToString();
+                    word.Transcription = reader["Transcription"].ToString() ?? String.Empty;
+                    word.Translation = reader["Translation"].ToString().Split(' ').ToList();
+                    word.Examples = reader["Examples"]?.ToString().Split(' ').ToList();
+                    word.ExamplesTranslation = reader["ExamplesTranslation"]?.ToString().Split(' ').ToList();
+                }
+
+                _sqlConnection.Close();
+            });
+
+            return word;
         }
 
         public void Insert(Word word)
