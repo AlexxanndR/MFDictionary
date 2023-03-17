@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:mde="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:MFDictionary.MVVM.View"
              xmlns:viewmodel="clr-namespace:MFDictionary.MVVM.ViewModel"
              mc:Ignorable="d" 
