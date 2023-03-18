@@ -41,32 +41,41 @@
                 FontFamily="Oswald Light" FontSize="20"
                 Margin="0 0 5 0" Width="80"
                 HorizontalAlignment="Right" VerticalContentAlignment="Center"
+                Background="{StaticResource LightGreen}"
                 Style="{StaticResource RectangleButtonStyle}"
                 Command="{Binding SaveCommand}"/>
 
         <ScrollViewer Grid.Row="1" 
-                      Margin="10 20"
+                      VerticalScrollBarVisibility="Auto"
                       Style="{StaticResource MaterialDesignScrollViewer}">
-            <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical"
+                        Margin="10 20">
                 <Grid Margin="0 0 0 10">
-                    <TextBox mde:HintAssist.Hint="Word"
-                         FontFamily="Oswald Light" FontSize="20"
-                         HorizontalAlignment="Left"
-                         Width="570"
-                         Text="{Binding TranslatableWord, UpdateSourceTrigger=LostFocus}"
-                         Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50*"/>
+                        <ColumnDefinition Width="50*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBox Grid.Column="0"
+                             mde:HintAssist.Hint="Word"
+                             FontFamily="Oswald Light" FontSize="20"
+                             HorizontalAlignment="Left"
+                             Margin="5 0"  Width="550"
+                             Text="{Binding TranslatableWord, UpdateSourceTrigger=LostFocus}"
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="LostFocus">
                                 <i:InvokeCommandAction Command="{Binding SearchWordCommand}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </TextBox>
-                    <TextBox mde:HintAssist.Hint="Transcription"
-                         FontFamily="Oswald Light" FontSize="20"
-                         HorizontalAlignment="Right"
-                         Width="570"
-                         Text="{Binding Transcription, UpdateSourceTrigger=PropertyChanged}"
-                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                    <TextBox Grid.Column="1"
+                             mde:HintAssist.Hint="Transcription"
+                             FontFamily="Oswald Light" FontSize="20"
+                             HorizontalAlignment="Right"
+                             Margin="5 0" Width="550"
+                             Text="{Binding Transcription, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
                 </Grid>
 
                 <StackPanel Orientation="Horizontal" 
@@ -118,7 +127,7 @@
 
         <StackPanel Grid.Row="2" 
                     Orientation="Horizontal" HorizontalAlignment="Center">
-            <ComboBox FontFamily="Agency FB" FontSize="18" 
+            <ComboBox FontFamily="Oswald Light" FontSize="18" 
                       Width="150" Height="30" Margin="0 0 20 0"
                       VerticalAlignment="Center" HorizontalAlignment="Center"
                       IsEditable="true"
@@ -133,7 +142,7 @@
 
             <Image Source="../../Icons/arrow_icon.png" Width="80"/>
 
-            <ComboBox FontFamily="Agency FB" FontSize="18" 
+            <ComboBox FontFamily="Oswald Light" FontSize="18" 
                       Width="150" Height="30" Margin="20 0 10 0"
                       VerticalAlignment="Center" HorizontalAlignment="Center"
                       IsEditable="true"

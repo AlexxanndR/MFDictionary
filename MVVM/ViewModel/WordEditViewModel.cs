@@ -261,13 +261,13 @@ namespace MFDictionary.MVVM.ViewModel
                                 FontFamily = new FontFamily("Oswald Light"),
                                 TxtMessage = 
                                 {
-                                    Text = "No internet connection!", 
+                                    Text = "No int`ernet connection!", 
                                     Foreground = Brushes.Black, FontSize = 20,
                                     VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center
                                 },
                                 TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
-                                BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black },
-                                BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black },
+                                BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
+                                BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
                                 MainContentControl = { Background = Brushes.White },
                                 TitleBackgroundPanel = { Background = Brushes.MistyRose },
                                 BorderThickness = new Thickness(0),
@@ -292,12 +292,13 @@ namespace MFDictionary.MVVM.ViewModel
                         FontFamily = new FontFamily("Oswald Light"),
                         TxtMessage = { 
                             Text = "Data won't be save! Are you sure?", 
-                            Foreground = Brushes.Black, FontSize = 20,
+                            Foreground = Brushes.Black,
+                            FontSize = 20,
                             VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center
                         },
                         TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
                         BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black},
-                        BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
+                        BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black},
                         MainContentControl = { Background = Brushes.White },
                         TitleBackgroundPanel = { Background = Brushes.MistyRose },
                         BorderThickness = new Thickness(0),
@@ -328,8 +329,8 @@ namespace MFDictionary.MVVM.ViewModel
                         {
                             TxtMessage = { Text = "Oops! There is no word to add!", Foreground = Brushes.Black, FontSize = 20 },
                             TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
-                            BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black },
-                            BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black },
+                            BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
+                            BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
                             MainContentControl = { Background = Brushes.White },
                             TitleBackgroundPanel = { Background = Brushes.MistyRose },
                             BorderThickness = new Thickness(0),
@@ -365,8 +366,8 @@ namespace MFDictionary.MVVM.ViewModel
                                 FontFamily = new FontFamily("Oswald Light"),
                                 TxtMessage = { Text = "The word already exists in the dictionary!", Foreground = Brushes.Black, FontSize = 20 },
                                 TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
-                                BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black },
-                                BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black },
+                                BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
+                                BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
                                 MainContentControl = { Background = Brushes.White },
                                 TitleBackgroundPanel = { Background = Brushes.MistyRose },
                                 BorderThickness = new Thickness(0),
@@ -446,13 +447,13 @@ namespace MFDictionary.MVVM.ViewModel
                                 FontFamily = new FontFamily("Oswald Light"),
                                 TxtMessage =
                                 {
-                                    Text = "No internet connection!",
+                                    Text = "No int`ernet connection!",
                                     Foreground = Brushes.Black, FontSize = 20,
                                     VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center
                                 },
                                 TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
-                                BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black },
-                                BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black },
+                                BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
+                                BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
                                 MainContentControl = { Background = Brushes.White },
                                 TitleBackgroundPanel = { Background = Brushes.MistyRose },
                                 BorderThickness = new Thickness(0),
