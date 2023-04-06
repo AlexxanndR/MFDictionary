@@ -1,4 +1,5 @@
-﻿using MFDictionary.Core;
+﻿using BespokeFusion;
+using MFDictionary.Core;
 using MFDictionary.Helpers;
 using MFDictionary.MVVM.Model;
 using MFDictionary.Services;
@@ -9,33 +10,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace MFDictionary.MVVM.ViewModel
 {
     internal class TestViewModel : ObservableObject
     {
-        WordsDboAdapter _wordsDboAdapter;
+        private WordsDboAdapter _wordsDboAdapter;
 
-        private ObservableCollection<TestWord> _testWordsList;
+        private List<Word> _words;
 
-        public ObservableCollection<TestWord> TestWordsList
+        private Word _currentWord;
+
+        public Word CurrentWord
         {
-            get { return _testWordsList; }
+            get { return _currentWord; }
             set
             {
-                _testWordsList = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _resultButtonPressed;
-
-        public bool ResultButtonPressed
-        {
-            get { return _resultButtonPressed; }
-            set
-            {
-                _resultButtonPressed = value;
+                _currentWord = value;
                 OnPropertyChanged();
             }
         }
@@ -43,27 +35,43 @@ namespace MFDictionary.MVVM.ViewModel
         public TestViewModel()
         {
             _wordsDboAdapter = new WordsDboAdapter();
-            _testWordsList= new ObservableCollection<TestWord>();
-            ResultButtonPressed = false;
-        }
+            _words = new List<Word>();
 
+        }
         private void Init()
         {
-/*            MessageBoxResult messageBoxResult = MessageBoxResult.None;
-
             long recordsCount = _wordsDboAdapter.GetRecordsCount();
 
-            if (recordsCount < 10)
-                messageBoxResult = MessageBox.Show("There are less than 10 words in the dictionary. Must be at least 10!", "Warning",
-                                   MessageBoxButton.OK, MessageBoxImage.Warning,
-                                   MessageBoxResult.OK, MessageBoxOptions.None);
+            var wordsNum = ApplicationContext.TestWordsNum;
 
-            if (messageBoxResult == MessageBoxResult.OK)
+            if (recordsCount < wordsNum)
+            {
+                CustomMaterialMessageBox msg = new CustomMaterialMessageBox
+                {
+                    FontFamily = new FontFamily("Oswald Light"),
+                    TxtMessage = { Text = String.Format("There are fewer than {0} words in your dictionary!", wordsNum),
+                                   Foreground = Brushes.Black,
+                                   FontSize = 20 },
+                    TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
+                    BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
+                    BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
+                    MainContentControl = { Background = Brushes.White },
+                    TitleBackgroundPanel = { Background = Brushes.MistyRose },
+                    BorderThickness = new Thickness(0),
+                    WindowStyle = WindowStyle.None
+                };
+                msg.Show();
+
+                foreach (Window window in Application.Current.Windows)
+                    if (window.GetType() == typeof(MainWindow))
+                        (window as MainWindow).MainWindowFrame.Navigate(new Uri("MVVM/View/TestMenuView.xaml", UriKind.RelativeOrAbsolute));
+
                 return;
+            }
 
-            List<Word> words = _wordsDboAdapter.GetRandomWords(10);
-            foreach (Word word in words)
-                TestWordsList.Add(word.GetTestWord());*/
+            _words = _wordsDboAdapter.GetRandomWords(10);
+
+            CurrentWord = _words.FirstOrDefault();
         }
 
         public RelayCommand WindowLoadedCommand

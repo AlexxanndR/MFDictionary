@@ -327,7 +327,7 @@ namespace MFDictionary.MVVM.ViewModel
                     {
                         CustomMaterialMessageBox msg = new CustomMaterialMessageBox
                         {
-                            TxtMessage = { Text = "Oops! There is no word to add!", Foreground = Brushes.Black, FontSize = 20 },
+                            TxtMessage = { Text = "Oops! There is no complete info!", Foreground = Brushes.Black, FontSize = 20 },
                             TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
                             BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
                             BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
@@ -359,6 +359,7 @@ namespace MFDictionary.MVVM.ViewModel
                     else if (ApplicationContext.SelectedId == -1)
                     {
                         bool isWordExist = await _wordsDboAdapter.IsWordExist(word);
+
                         if (isWordExist)
                         {
                             CustomMaterialMessageBox msg = new CustomMaterialMessageBox

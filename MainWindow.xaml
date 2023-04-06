@@ -31,7 +31,7 @@
                              Command="{Binding MenuSelectionCommand}" CommandParameter="Dictionary"/>
                 <RadioButton x:Name="Test" Content="TEST"
                              Style="{StaticResource MenuButtonStyle}"
-                             Command="{Binding MenuSelectionCommand}" CommandParameter="Test"/>
+                             Command="{Binding MenuSelectionCommand}" CommandParameter="TestMenu"/>
             </StackPanel>
         </Border>
 

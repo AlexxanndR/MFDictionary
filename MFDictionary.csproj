@@ -319,12 +319,16 @@
     <Compile Include="MVVM\Model\TestWord.cs" />
     <Compile Include="MVVM\Model\Word.cs" />
     <Compile Include="MVVM\ViewModel\DictionaryViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\TestMenuViewModel.cs" />
     <Compile Include="MVVM\ViewModel\TestViewModel.cs" />
     <Compile Include="MVVM\ViewModel\WordEditViewModel.cs" />
     <Compile Include="MVVM\View\DictionaryView.xaml.cs">
       <DependentUpon>DictionaryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\Model\YandexAnswer.cs" />
+    <Compile Include="MVVM\View\TestMenuView.xaml.cs">
+      <DependentUpon>TestMenuView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MVVM\View\TestView.xaml.cs">
       <DependentUpon>TestView.xaml</DependentUpon>
     </Compile>
@@ -341,6 +345,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MVVM\View\DictionaryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\TestMenuView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

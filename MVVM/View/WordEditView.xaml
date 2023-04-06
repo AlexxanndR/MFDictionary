@@ -81,23 +81,23 @@
                 <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Center" Margin="0 0 0 10">
                     <TextBox mde:HintAssist.Hint="Translation"
-                         FontFamily="Oswald Light" FontSize="20"
-                         HorizontalAlignment="Center"
-                         Width="570"
-                         Text="{Binding Translation, UpdateSourceTrigger=PropertyChanged}"
-                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                             FontFamily="Oswald Light" FontSize="20"
+                             HorizontalAlignment="Center"
+                             Width="570"
+                             Text="{Binding Translation, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
                     <Button HorizontalAlignment="Left"
-                        Style="{StaticResource AcceptButtonStyle}"
-                        Command="{Binding AddTranslationCommand}">
+                            Style="{StaticResource AcceptButtonStyle}"
+                            Command="{Binding AddTranslationCommand}">
                         <BitmapImage UriSource="../../Icons/add_icon.png"/>
                     </Button>
                 </StackPanel>
 
                 <Grid Margin="0 0 0 10">
                     <ListBox ItemsSource="{Binding Translations}"
-                         Background="Transparent"
-                         BorderThickness="0"
-                         ItemContainerStyle="{StaticResource WordsListBoxItem}">
+                             Background="Transparent"
+                             BorderThickness="0"
+                             ItemContainerStyle="{StaticResource WordsListBoxItem}">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel IsItemsHost="True" Orientation="Horizontal" 
@@ -108,26 +108,26 @@
                 </Grid>
 
                 <StackPanel Orientation="Vertical" 
-                        HorizontalAlignment="Center" Margin="0 0 0 10">
+                            HorizontalAlignment="Center" Margin="0 0 0 10">
                     <TextBox mde:HintAssist.Hint="Examples" AcceptsReturn="true"
-                         FontFamily="Oswald Light" FontSize="20"
-                         HorizontalAlignment="Center" TextWrapping="Wrap"
-                         Width="1150" Height="150"
-                         Text="{Binding Examples, UpdateSourceTrigger=PropertyChanged}"
-                         Style="{StaticResource MaterialDesignFilledTextBox}"/>
+                             FontFamily="Oswald Light" FontSize="20"
+                             HorizontalAlignment="Center" TextWrapping="Wrap"
+                             Width="1150" Height="150"
+                             Text="{Binding Examples, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource MaterialDesignFilledTextBox}"/>
                     <TextBox mde:HintAssist.Hint="Examples translation" AcceptsReturn="true"
-                         FontFamily="Oswald Light" FontSize="20"
-                         HorizontalAlignment="Center" TextWrapping="Wrap"
-                         Width="1150" Height="150"
-                         Text="{Binding ExamplesTraslation, UpdateSourceTrigger=PropertyChanged}"
-                         Style="{StaticResource MaterialDesignFilledTextBox}"/>
+                             FontFamily="Oswald Light" FontSize="20"
+                             HorizontalAlignment="Center" TextWrapping="Wrap"
+                             Width="1150" Height="150"
+                             Text="{Binding ExamplesTraslation, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource MaterialDesignFilledTextBox}"/>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
 
         <StackPanel Grid.Row="2" 
                     Orientation="Horizontal" HorizontalAlignment="Center">
-            <ComboBox FontFamily="Oswald Light" FontSize="18" 
+            <ComboBox FontFamily="Oswald Light" FontSize="15" 
                       Width="150" Height="30" Margin="0 0 20 0"
                       VerticalAlignment="Center" HorizontalAlignment="Center"
                       IsEditable="true"
@@ -142,7 +142,7 @@
 
             <Image Source="../../Icons/arrow_icon.png" Width="80"/>
 
-            <ComboBox FontFamily="Oswald Light" FontSize="18" 
+            <ComboBox FontFamily="Oswald Light" FontSize="15" 
                       Width="150" Height="30" Margin="20 0 10 0"
                       VerticalAlignment="Center" HorizontalAlignment="Center"
                       IsEditable="true"
