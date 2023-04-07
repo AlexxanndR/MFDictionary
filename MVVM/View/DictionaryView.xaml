@@ -27,7 +27,7 @@
                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                  ItemContainerStyle="{StaticResource DictionaryListBoxItem}"/>
 
-        <Button Content="ADD"
+        <Button Content="ADD" Cursor="Hand"
                 FontFamily="Oswald Light" FontSize="20"
                 Width="100" Height="35"
                 Margin="0 0 25 10"

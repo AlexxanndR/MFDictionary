@@ -1,4 +1,5 @@
 ﻿using Avalonia.Animation;
+using BespokeFusion;
 using MFDictionary.Core;
 using MFDictionary.Services;
 using System;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace MFDictionary.MVVM.ViewModel
 {
@@ -40,12 +42,28 @@ namespace MFDictionary.MVVM.ViewModel
 
         public TestMenuViewModel() 
         {
-            TestTypes = new List<string>()
+            TestTypes = ApplicationContext.TestTypes;
+        }
+
+        private void ShowMessageBox(string message)
+        {
+            CustomMaterialMessageBox msg = new CustomMaterialMessageBox
             {
-                "Writing words by using translation",
-                "Writing translations by using word",
-                "Writing words in examples"
+                FontFamily = new FontFamily("Oswald Light"),
+                TxtMessage = { Text = String.Format(message),
+                               Foreground = Brushes.Black,
+                               FontSize = 20, 
+                               HorizontalAlignment = HorizontalAlignment.Center },
+                TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
+                BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
+                BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
+                MainContentControl = { Background = Brushes.White },
+                TitleBackgroundPanel = { Background = Brushes.MistyRose },
+                BorderThickness = new Thickness(0),
+                WindowStyle = WindowStyle.None
             };
+
+            msg.Show();
         }
 
         public RelayCommand ContinueCommand
@@ -56,7 +74,19 @@ namespace MFDictionary.MVVM.ViewModel
                 {
                     ApplicationContext.TestWordsNum = MaxWordsNum;
 
-                    //TO DO
+                    if (MaxWordsNum <= 0)
+                    {
+                        ShowMessageBox("Incorrect words number!");
+                        return;
+                    }
+
+                    if (String.IsNullOrWhiteSpace(TestType))
+                    {
+                        ShowMessageBox("No test type selected!");
+                        return;
+                    }
+
+                    ApplicationContext.SelectedTestType = TestType;
 
                     foreach (Window window in Application.Current.Windows)
                         if (window.GetType() == typeof(MainWindow))

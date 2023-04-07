@@ -6,6 +6,7 @@
              xmlns:mde="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:MFDictionary.MVVM.View"
              xmlns:viewmodel="clr-namespace:MFDictionary.MVVM.ViewModel"
+             xmlns:validations="clr-namespace:MFDictionary.Validations"
              mc:Ignorable="d" 
              d:DesignHeight="630" d:DesignWidth="1180">
     <UserControl.DataContext>
@@ -17,13 +18,21 @@
                     HorizontalAlignment="Center" VerticalAlignment="Center">
 
             <TextBox mde:HintAssist.Hint="The maximum number of words in training"
-                     FontFamily="Oswald" FontWeight="Light" FontSize="20"
+                     mde:ValidationAssist.UsePopup="True"
+                     FontFamily="Oswald" FontWeight="Light" FontSize="25"
                      Width="500"
                      Margin="0 0 0 5"
-                     Text="{Binding MaxWordsNum, UpdateSourceTrigger=PropertyChanged}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                <TextBox.Text>
+                    <Binding Path="MaxWordsNum" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <validations:ValueIsPositiveInt />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
 
-            <ComboBox FontFamily="Oswald Light" FontSize="15" 
+            <ComboBox FontFamily="Oswald Light" FontSize="25" 
                       Width="Auto" MinWidth="500"
                       Margin="0 0 0 5"
                       IsEditable="true"

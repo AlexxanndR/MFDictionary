@@ -4,7 +4,7 @@
                     xmlns:mde="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:viewModel="clr-namespace:MFDictionary.MVVM.ViewModel">
     <Style TargetType="{x:Type ListBoxItem}"
-           x:Key="VerticalListBoxItem">
+           x:Key="CustomListBoxItem">
         <Style.Setters>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Height" Value="Auto"/>
@@ -137,7 +137,7 @@
                                                  VerticalAlignment="Center"
                                                  FontWeight="Light"
                                                  ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                                 ItemContainerStyle="{StaticResource VerticalListBoxItem}">
+                                                 ItemContainerStyle="{StaticResource CustomListBoxItem}">
                                             <ListBox.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <WrapPanel IsItemsHost="True" 
@@ -184,7 +184,7 @@
                                              BorderThickness="0"
                                              FontWeight="Medium"
                                              ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                             ItemContainerStyle="{StaticResource VerticalListBoxItem}">
+                                             ItemContainerStyle="{StaticResource CustomListBoxItem}">
                                         <ListBox.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <WrapPanel IsItemsHost="True" 

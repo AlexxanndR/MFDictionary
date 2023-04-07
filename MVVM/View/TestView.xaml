@@ -21,26 +21,82 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.4*"/>
-            <RowDefinition Height="0.2*"/>
-            <RowDefinition Height="0.4*"/>
+            <RowDefinition Height="0.45*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.45*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Vertical"
-                    HorizontalAlignment="Center">
-
-            <TextBlock Text="{Binding }"
+        <StackPanel Grid.Row="0"
+                    Orientation="Vertical"
+                    Margin="10 0"
+                    VerticalAlignment="Center">
+            <TextBlock Text="{Binding Text}"
                        FontFamily="Oswald Light" FontSize="20"
+                       HorizontalAlignment="Center"
                        Style="{StaticResource MaterialDesignTextBlock}"/>
+            <ListBox ItemsSource="{Binding Translations}"
+                     FontWeight="Light"
+                     HorizontalAlignment="Center"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     ItemContainerStyle="{StaticResource CustomListBoxItem}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True" Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
         </StackPanel>
 
-        <Border Grid.Row="1" 
-                Background="#8AFFD9">
-            <Button x:Name="ResultButton" Content="GET RESULT" FontFamily="Agency FB" FontSize="30" 
-                    Width="200" Margin="200 5"
-                    VerticalAlignment="Center" HorizontalAlignment="Center"
-                    Background="Transparent"
-                    Cursor="Hand" Tag="{Binding ResultButtonPressed}" Command="{Binding GetResultCommand}"/>
-        </Border>
+        <Grid Grid.Row="1" 
+              Background="{StaticResource MiddleGreen}">
+            <TextBox Text="{Binding Answer, UpdateSourceTrigger=PropertyChanged}"
+                     FontFamily="Oswald" FontWeight="Light" FontSize="20"
+                     Width="800"
+                     Margin="10"
+                     Style="{StaticResource MaterialDesignTextBox}"/>
+            <Button HorizontalAlignment="Right"
+                    Margin="15 10"
+                    Style="{StaticResource AcceptButtonStyle}"
+                    Command="{Binding GetAnswerCommand}">
+                <BitmapImage UriSource="../../Icons/help_icon.png"/>
+            </Button>
+        </Grid>
+
+        <ScrollViewer Grid.Row="2"
+                      VerticalScrollBarVisibility="Auto">
+            <Grid Grid.Row="2"
+                  Margin="15 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <ListBox Grid.Column="0"
+                         ItemsSource="{Binding Examples}"            
+                         Background="Transparent"
+                         BorderThickness="0"
+                         ItemContainerStyle="{StaticResource CustomListBoxItem}">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel IsItemsHost="True" Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+
+                <ListBox Grid.Column="1"
+                         ItemsSource="{Binding ExamplesTranslation}"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         ItemContainerStyle="{StaticResource CustomListBoxItem}">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel IsItemsHost="True" Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+            </Grid>
+        </ScrollViewer>
+
     </Grid>
 </UserControl>
