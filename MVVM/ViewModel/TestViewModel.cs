@@ -26,6 +26,8 @@ namespace MFDictionary.MVVM.ViewModel
 
         private int _wordIndex;
 
+        private int _rightAnswersCount;
+
         private string _resultBorderValue;
 
         public string ResultBorderValue
@@ -128,27 +130,7 @@ namespace MFDictionary.MVVM.ViewModel
             _words = new List<Word>();
             _resultBorderValue = "Black";
             _progressBarValue = 0;
-        }
-
-        private void ShowMessageBox(string message)
-        {
-            CustomMaterialMessageBox msg = new CustomMaterialMessageBox
-            {
-                FontFamily = new FontFamily("Oswald Light"),
-                TxtMessage = { Text = String.Format(message),
-                               Foreground = Brushes.Black,
-                               FontSize = 20,
-                               HorizontalAlignment = HorizontalAlignment.Center },
-                TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
-                BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
-                BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
-                MainContentControl = { Background = Brushes.White },
-                TitleBackgroundPanel = { Background = Brushes.MistyRose },
-                BorderThickness = new Thickness(0),
-                WindowStyle = WindowStyle.None
-            };
-
-            msg.Show();
+            _rightAnswersCount = 0;
         }
 
         private void SetTestFields()
@@ -183,7 +165,7 @@ namespace MFDictionary.MVVM.ViewModel
 
             if (recordsCount < wordsNum)
             {
-                ShowMessageBox(String.Format("There are fewer than {0} words in your dictionary!", wordsNum));
+                CustomMessageBox.ShowWarning(String.Format("There are fewer than {0} words in your dictionary!", wordsNum));
 
                 foreach (Window window in Application.Current.Windows)
                     if (window.GetType() == typeof(MainWindow))
@@ -243,6 +225,8 @@ namespace MFDictionary.MVVM.ViewModel
 
                     if (isRightAnswer)
                     {
+                        _rightAnswersCount++;
+
                         ResultBorderValue = "Blue";
                         ResultImageUri = "../../Icons/done_icon.png";
                     }
@@ -274,7 +258,11 @@ namespace MFDictionary.MVVM.ViewModel
                             _currentWord = _words[_wordIndex];
                         else
                         {
-                            //TO DO
+                            CustomMessageBox.ShowInfo(String.Format("You passed the test: {0}/{1}", _rightAnswersCount, _words.Count));
+
+                            foreach (Window window in Application.Current.Windows)
+                                if (window.GetType() == typeof(MainWindow))
+                                    (window as MainWindow).MainWindowFrame.Navigate(new Uri("MVVM/View/TestMenuView.xaml", UriKind.RelativeOrAbsolute));
                         }
 
                         SetTestFields();

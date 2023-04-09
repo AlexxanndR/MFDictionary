@@ -41,27 +41,6 @@ namespace MFDictionary.MVVM.ViewModel
             TestTypes = TestType.TypesInStrings;
         }
 
-        private void ShowMessageBox(string message)
-        {
-            CustomMaterialMessageBox msg = new CustomMaterialMessageBox
-            {
-                FontFamily = new FontFamily("Oswald Light"),
-                TxtMessage = { Text = String.Format(message),
-                               Foreground = Brushes.Black,
-                               FontSize = 20, 
-                               HorizontalAlignment = HorizontalAlignment.Center },
-                TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
-                BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
-                BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
-                MainContentControl = { Background = Brushes.White },
-                TitleBackgroundPanel = { Background = Brushes.MistyRose },
-                BorderThickness = new Thickness(0),
-                WindowStyle = WindowStyle.None
-            };
-
-            msg.Show();
-        }
-
         public RelayCommand ContinueCommand
         {
             get
@@ -72,13 +51,13 @@ namespace MFDictionary.MVVM.ViewModel
 
                     if (TestWordsNum <= 0)
                     {
-                        ShowMessageBox("Incorrect words number!");
+                        CustomMessageBox.ShowWarning("Incorrect words number!");
                         return;
                     }
 
                     if (String.IsNullOrWhiteSpace(SelectedTestType))
                     {
-                        ShowMessageBox("No test type selected!");
+                        CustomMessageBox.ShowWarning("No test type selected!");
                         return;
                     }
 

@@ -307,8 +307,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Core\CustomMessageBox.cs" />
     <Compile Include="Data\TestType.cs" />
     <Compile Include="Helpers\Parser.cs" />
+    <Compile Include="Validations\ValueIsNotEmpty.cs" />
     <Compile Include="Validations\ValueIsPositiveInt.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

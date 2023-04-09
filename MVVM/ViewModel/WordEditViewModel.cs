@@ -186,28 +186,6 @@ namespace MFDictionary.MVVM.ViewModel
             _langsTo = new List<string>();
             _translations = new ObservableCollection<string>();
         }
-        private MessageBoxResult ShowMessageBox(string message, string title)
-        {
-            CustomMaterialMessageBox msg = new CustomMaterialMessageBox
-            {
-                FontFamily = new FontFamily("Oswald Light"),
-                TxtMessage = { Text = String.Format(message),
-                               Foreground = Brushes.Black,
-                               FontSize = 20,
-                               HorizontalAlignment = HorizontalAlignment.Center },
-                TxtTitle = { Text = title, Foreground = Brushes.Black },
-                BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
-                BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
-                MainContentControl = { Background = Brushes.White },
-                TitleBackgroundPanel = { Background = Brushes.MistyRose },
-                BorderThickness = new Thickness(0),
-                WindowStyle = WindowStyle.None
-            };
-            msg.Show();
-
-            return msg.Result;
-        }
-
         private async Task Init()
         {
             var langs = await _yandexService.GetLangsAsync();
@@ -261,7 +239,7 @@ namespace MFDictionary.MVVM.ViewModel
                     {
                         if (ex.InnerException is HttpRequestException)
                         {
-                            ShowMessageBox("No int`ernet connection!", "Warning");
+                            CustomMessageBox.ShowWarning("No int`ernet connection!");
                         }
                     }
                 });
@@ -274,7 +252,7 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 return new RelayCommand((obj) =>
                 {
-                    var msgResult = ShowMessageBox("Data won't be save! Are you sure?", "Warning");
+                    var msgResult = CustomMessageBox.ShowWarning("Data won't be save! Are you sure?");
 
                     if (msgResult == MessageBoxResult.OK)
                     {
@@ -294,7 +272,7 @@ namespace MFDictionary.MVVM.ViewModel
                 {
                     if (String.IsNullOrWhiteSpace(TranslatableWord) || Translations.Count == 0)
                     {
-                        ShowMessageBox("Oops! There is no complete info!", "Warning");
+                        CustomMessageBox.ShowWarning("Oops! There is no complete info!");
                         return;
                     }
 
@@ -318,7 +296,7 @@ namespace MFDictionary.MVVM.ViewModel
 
                         if (isWordExist)
                         {
-                            ShowMessageBox("The word already exists in the dictionary!", "Warning");
+                            CustomMessageBox.ShowWarning("The word already exists in the dictionary!");
                             return;
                         }
 
@@ -386,7 +364,7 @@ namespace MFDictionary.MVVM.ViewModel
                     catch (Exception ex)
                     {
                         if (ex.InnerException is HttpRequestException)
-                            ShowMessageBox("No internet connection!", "Warning");
+                            CustomMessageBox.ShowWarning("No internet connection!");
                     }
 
                     if (word != null)

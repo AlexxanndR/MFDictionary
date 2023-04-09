@@ -40,7 +40,7 @@
                      HorizontalAlignment="Center"
                      Background="Transparent"
                      BorderThickness="0"
-                     ItemContainerStyle="{StaticResource OrdinaryListBoxItem}">
+                     ItemContainerStyle="{StaticResource UnderlinedListBoxItem}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel IsItemsHost="True" Orientation="Horizontal"/>
@@ -93,7 +93,7 @@
                          BorderThickness="0"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
                          ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                         ItemContainerStyle="{StaticResource UnderlinedListBoxItem}">
+                         ItemContainerStyle="{StaticResource OrdinaryListBoxItem}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel IsItemsHost="True" Orientation="Vertical"/>
@@ -102,8 +102,9 @@
                 </ListBox>
 
                 <Border Grid.Column="0"
-                        BorderBrush="{StaticResource DarkGreen}"
-                        BorderThickness="0 0 1 0"/>
+                        BorderBrush="Black"
+                        BorderThickness="0 0 1 0"
+                        Margin="10"/>
 
                 <ListBox Grid.Column="1"
                          ItemsSource="{Binding ExamplesTranslation}"

@@ -15,8 +15,7 @@
                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
                         <Grid>
                             <TextBlock Text="{Binding}"
-                                       FontSize="20" FontFamily="Oswald" FontWeight="{TemplateBinding FontWeight}" 
-                                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                       FontSize="20" FontFamily="Oswald" FontWeight="{TemplateBinding FontWeight}"/>
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -37,8 +36,7 @@
                         <Border BorderBrush="Black" BorderThickness="0 0 0 1">
                             <Grid>
                                 <TextBlock Text="{Binding}"
-                                           FontSize="20" FontFamily="Oswald" FontWeight="{TemplateBinding FontWeight}" 
-                                           VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                           FontSize="20" FontFamily="Oswald" FontWeight="{TemplateBinding FontWeight}"/>
                             </Grid>
                         </Border>
                     </ControlTemplate>
