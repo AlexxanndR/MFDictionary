@@ -24,7 +24,7 @@
                      Margin="0 0 0 5"
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <TextBox.Text>
-                    <Binding Path="MaxWordsNum" UpdateSourceTrigger="PropertyChanged">
+                    <Binding Path="TestWordsNum" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <validations:ValueIsPositiveInt />
                         </Binding.ValidationRules>
@@ -36,17 +36,17 @@
                       Width="Auto" MinWidth="500"
                       Margin="0 0 0 5"
                       IsEditable="true"
-                      ItemsSource="{Binding TestTypes}" SelectedValue="{Binding TestType, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding TestTypes}" SelectedValue="{Binding SelectedTestType, UpdateSourceTrigger=PropertyChanged}"
                       Style="{StaticResource MaterialDesignComboBox}"/>
             
         </StackPanel>
 
         <Button Content="CONTINUE"
                 FontFamily="Oswald Light" FontSize="20"
-                Width="100" Height="35"
+                Width="110" Height="35"
                 Margin="0 0 10 10"
                 HorizontalAlignment="Right" VerticalAlignment="Bottom" 
-                Background="Transparent"
+                Background="{StaticResource MiddleGreen}"
                 Style="{StaticResource RectangleButtonStyle}"
                 Command="{Binding ContinueCommand}"/>
     </Grid>

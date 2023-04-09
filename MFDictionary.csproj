@@ -307,6 +307,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Data\TestType.cs" />
+    <Compile Include="Helpers\Parser.cs" />
     <Compile Include="Validations\ValueIsPositiveInt.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -423,6 +425,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\help_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\done_icon.png" />
+    <Resource Include="Icons\wrong_icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\MaterialDesignThemes.4.8.0\build\MaterialDesignThemes.targets" Condition="Exists('packages\MaterialDesignThemes.4.8.0\build\MaterialDesignThemes.targets')" />

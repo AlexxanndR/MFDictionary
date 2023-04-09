@@ -14,19 +14,6 @@ namespace MFDictionary.Services
 
         public static int TestWordsNum { get; set; }
 
-        public static List<string> TestTypes 
-        {
-            get
-            {
-                return new List<string>() 
-                {
-                    "Writing words by using translation",
-                    "Writing translations by using word",
-                    "Writing words in examples" 
-                };
-            }
-        }
-
-        public static string SelectedTestType { get; set; }
+        public static TestType.Type SelectedTestType { get; set; }
     }
 }

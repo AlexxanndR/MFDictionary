@@ -186,6 +186,27 @@ namespace MFDictionary.MVVM.ViewModel
             _langsTo = new List<string>();
             _translations = new ObservableCollection<string>();
         }
+        private MessageBoxResult ShowMessageBox(string message, string title)
+        {
+            CustomMaterialMessageBox msg = new CustomMaterialMessageBox
+            {
+                FontFamily = new FontFamily("Oswald Light"),
+                TxtMessage = { Text = String.Format(message),
+                               Foreground = Brushes.Black,
+                               FontSize = 20,
+                               HorizontalAlignment = HorizontalAlignment.Center },
+                TxtTitle = { Text = title, Foreground = Brushes.Black },
+                BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
+                BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
+                MainContentControl = { Background = Brushes.White },
+                TitleBackgroundPanel = { Background = Brushes.MistyRose },
+                BorderThickness = new Thickness(0),
+                WindowStyle = WindowStyle.None
+            };
+            msg.Show();
+
+            return msg.Result;
+        }
 
         private async Task Init()
         {
@@ -226,22 +247,6 @@ namespace MFDictionary.MVVM.ViewModel
             }
         }
 
-        private List<string> ParseExamples()
-        {
-            if (String.IsNullOrEmpty(Examples))
-                return null;
-
-            return new List<string>(Examples.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries));
-        }
-
-        private List<string> ParseExamplesTranslation()
-        {
-            if (String.IsNullOrEmpty(ExamplesTranslation))
-                return null;
-
-            return new List<string>(ExamplesTranslation.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries));
-        }
-
         public RelayCommand WindowLoadedCommand
         {
             get
@@ -256,25 +261,7 @@ namespace MFDictionary.MVVM.ViewModel
                     {
                         if (ex.InnerException is HttpRequestException)
                         {
-                            CustomMaterialMessageBox msg = new CustomMaterialMessageBox
-                            {
-                                FontFamily = new FontFamily("Oswald Light"),
-                                TxtMessage = 
-                                {
-                                    Text = "No int`ernet connection!", 
-                                    Foreground = Brushes.Black, FontSize = 20,
-                                    VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center
-                                },
-                                TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
-                                BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
-                                BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
-                                MainContentControl = { Background = Brushes.White },
-                                TitleBackgroundPanel = { Background = Brushes.MistyRose },
-                                BorderThickness = new Thickness(0),
-
-                                WindowStyle = WindowStyle.None
-                            };
-                            msg.Show();
+                            ShowMessageBox("No int`ernet connection!", "Warning");
                         }
                     }
                 });
@@ -287,27 +274,9 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 return new RelayCommand((obj) =>
                 {
-                    CustomMaterialMessageBox msg = new CustomMaterialMessageBox
-                    {
-                        FontFamily = new FontFamily("Oswald Light"),
-                        TxtMessage = { 
-                            Text = "Data won't be save! Are you sure?", 
-                            Foreground = Brushes.Black,
-                            FontSize = 20,
-                            VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center
-                        },
-                        TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
-                        BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black},
-                        BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black},
-                        MainContentControl = { Background = Brushes.White },
-                        TitleBackgroundPanel = { Background = Brushes.MistyRose },
-                        BorderThickness = new Thickness(0),
-                        
-                        WindowStyle = WindowStyle.None
-                    };
-                    msg.Show();
+                    var msgResult = ShowMessageBox("Data won't be save! Are you sure?", "Warning");
 
-                    if (msg.Result == MessageBoxResult.OK)
+                    if (msgResult == MessageBoxResult.OK)
                     {
                         foreach (Window window in Application.Current.Windows)
                             if (window.GetType() == typeof(MainWindow))
@@ -325,19 +294,7 @@ namespace MFDictionary.MVVM.ViewModel
                 {
                     if (String.IsNullOrWhiteSpace(TranslatableWord) || Translations.Count == 0)
                     {
-                        CustomMaterialMessageBox msg = new CustomMaterialMessageBox
-                        {
-                            TxtMessage = { Text = "Oops! There is no complete info!", Foreground = Brushes.Black, FontSize = 20 },
-                            TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
-                            BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
-                            BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
-                            MainContentControl = { Background = Brushes.White },
-                            TitleBackgroundPanel = { Background = Brushes.MistyRose },
-                            BorderThickness = new Thickness(0),
-                            FontFamily = new FontFamily("Oswald Light"),
-                            WindowStyle = WindowStyle.None,
-                        };
-                        msg.Show();
+                        ShowMessageBox("Oops! There is no complete info!", "Warning");
                         return;
                     }
 
@@ -346,10 +303,9 @@ namespace MFDictionary.MVVM.ViewModel
                         Text = this.TranslatableWord,
                         Transcription = this.Transcription,
                         Translation = this.Translations.ToList(),
-                        Examples = this.ParseExamples(),
-                        ExamplesTranslation = this.ParseExamplesTranslation()
+                        Examples = Parser.ParseExamplesToList(Examples),
+                        ExamplesTranslation = Parser.ParseExamplesToList(ExamplesTranslation)
                     };
-
 
                     if (ApplicationContext.SelectedId >= 0)
                     {
@@ -362,19 +318,7 @@ namespace MFDictionary.MVVM.ViewModel
 
                         if (isWordExist)
                         {
-                            CustomMaterialMessageBox msg = new CustomMaterialMessageBox
-                            {
-                                FontFamily = new FontFamily("Oswald Light"),
-                                TxtMessage = { Text = "The word already exists in the dictionary!", Foreground = Brushes.Black, FontSize = 20 },
-                                TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
-                                BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
-                                BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
-                                MainContentControl = { Background = Brushes.White },
-                                TitleBackgroundPanel = { Background = Brushes.MistyRose },
-                                BorderThickness = new Thickness(0),
-                                WindowStyle = WindowStyle.None
-                            };
-                            msg.Show();
+                            ShowMessageBox("The word already exists in the dictionary!", "Warning");
                             return;
                         }
 
@@ -442,27 +386,7 @@ namespace MFDictionary.MVVM.ViewModel
                     catch (Exception ex)
                     {
                         if (ex.InnerException is HttpRequestException)
-                        {
-                            CustomMaterialMessageBox msg = new CustomMaterialMessageBox
-                            {
-                                FontFamily = new FontFamily("Oswald Light"),
-                                TxtMessage =
-                                {
-                                    Text = "No int`ernet connection!",
-                                    Foreground = Brushes.Black, FontSize = 20,
-                                    VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Center
-                                },
-                                TxtTitle = { Text = "Warning", Foreground = Brushes.Black },
-                                BtnOk = { Content = "Ok", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
-                                BtnCancel = { Content = "Cancel", Background = Brushes.Transparent, Foreground = Brushes.Black, BorderBrush = Brushes.Black },
-                                MainContentControl = { Background = Brushes.White },
-                                TitleBackgroundPanel = { Background = Brushes.MistyRose },
-                                BorderThickness = new Thickness(0),
-
-                                WindowStyle = WindowStyle.None
-                            };
-                            msg.Show();
-                        }
+                            ShowMessageBox("No internet connection!", "Warning");
                     }
 
                     if (word != null)

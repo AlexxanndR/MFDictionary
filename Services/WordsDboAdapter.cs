@@ -369,10 +369,10 @@ namespace MFDictionary.Services
 
                 word.Id = (int)reader["Id"];
                 word.Text = reader["Text"].ToString();
-                word.Transcription = reader["Transcription"]?.ToString() ?? String.Empty;
+                word.Transcription = reader["Transcription"].ToString() ?? String.Empty;
                 word.Translation = reader["Translation"].ToString().Split(' ').ToList();
-                word.Examples = reader["Examples"]?.ToString().Split(' ').ToList();
-                word.ExamplesTranslation = reader["ExamplesTranslation"]?.ToString().Split(' ').ToList();
+                word.Examples = reader["Examples"]?.ToString().Split('\n').ToList();
+                word.ExamplesTranslation = reader["ExamplesTranslation"]?.ToString().Split('\n').ToList();
 
                 words.Add(word);
             }

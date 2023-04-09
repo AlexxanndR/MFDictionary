@@ -12,7 +12,10 @@ namespace MFDictionary.Validations
 
             if (!Int32.TryParse(str, out number))
                 return new ValidationResult(false, "Incorrect number!");
-            
+
+            if (number <= 0)
+                return new ValidationResult(false, "Number must be greater than 0!");
+
             return ValidationResult.ValidResult;
         }
     }

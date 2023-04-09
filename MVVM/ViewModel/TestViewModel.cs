@@ -1,4 +1,5 @@
-﻿using BespokeFusion;
+﻿using Avalonia.Controls.Primitives;
+using BespokeFusion;
 using MFDictionary.Core;
 using MFDictionary.Helpers;
 using MFDictionary.MVVM.Model;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -22,12 +24,40 @@ namespace MFDictionary.MVVM.ViewModel
 
         private Word _currentWord;
 
-        public Word CurrentWord
+        private int _wordIndex;
+
+        private string _resultBorderValue;
+
+        public string ResultBorderValue
         {
-            get { return _currentWord; }
+            get { return _resultBorderValue; }
             set
             {
-                _currentWord = value;
+                _resultBorderValue = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _resultImageUri;
+
+        public string ResultImageUri
+        {
+            get { return _resultImageUri; }
+            set
+            {
+                _resultImageUri = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _progressBarValue;
+
+        public int ProgressBarValue
+        {
+            get { return _progressBarValue; }
+            set
+            {
+                _progressBarValue = value;
                 OnPropertyChanged();
             }
         }
@@ -87,7 +117,7 @@ namespace MFDictionary.MVVM.ViewModel
             get { return _examplesTranslation; }
             set
             {
-                _examples = value;
+                _examplesTranslation = value;
                 OnPropertyChanged();
             }
         }
@@ -96,6 +126,8 @@ namespace MFDictionary.MVVM.ViewModel
         {
             _wordsDboAdapter = new WordsDboAdapter();
             _words = new List<Word>();
+            _resultBorderValue = "Black";
+            _progressBarValue = 0;
         }
 
         private void ShowMessageBox(string message)
@@ -119,6 +151,30 @@ namespace MFDictionary.MVVM.ViewModel
             msg.Show();
         }
 
+        private void SetTestFields()
+        {
+            Text = String.Empty;
+            Translations = null;
+            Examples = null;
+            ExamplesTranslation = null;
+
+            switch (ApplicationContext.SelectedTestType)
+            {
+                case TestType.Type.WordByTranslations:
+                    Translations = _currentWord.Translation;
+                    Examples = _currentWord.Examples;
+                    break;
+                case TestType.Type.TranslationsByWord:
+                    Text = _currentWord.Text;
+                    Examples = _currentWord.ExamplesTranslation;
+                    break;
+                case TestType.Type.WordByExamples:
+                    Examples = Parser.ParseExamplesForTest(_currentWord.Examples, _currentWord.Text);
+                    ExamplesTranslation = _currentWord.ExamplesTranslation;
+                    break;
+            }  
+        }
+
         private void Init()
         {
             long recordsCount = _wordsDboAdapter.GetRecordsCount();
@@ -138,31 +194,94 @@ namespace MFDictionary.MVVM.ViewModel
 
             _words = _wordsDboAdapter.GetRandomWords(wordsNum);
 
-            CurrentWord = _words.FirstOrDefault();
+            _currentWord = _words.FirstOrDefault();
+            _wordIndex = 0;
 
-            if (ApplicationContext.SelectedTestType == ApplicationContext.TestTypes[0])
-            {
-                Translations = CurrentWord.Translation;
-                Examples = CurrentWord.Examples;
-            }
-            else if (ApplicationContext.SelectedTestType == ApplicationContext.TestTypes[1])
-            {
-                Text = CurrentWord.Text;
-                Examples = CurrentWord.ExamplesTranslation;
-            } 
-            else if (ApplicationContext.SelectedTestType == ApplicationContext.TestTypes[1])
-            {
-                //TO DO
-            }
+            SetTestFields();
         }
 
         public RelayCommand WindowLoadedCommand
         {
             get
             {
-                return new RelayCommand((loaded) =>
+                return new RelayCommand((obj) =>
                 {
                     Init();
+                });
+            }
+        }
+
+        public RelayCommand NextWordCommand
+        {
+            get
+            {
+                return new RelayCommand(async (obj) =>
+                {
+                    bool isRightAnswer = false;
+
+                    switch (ApplicationContext.SelectedTestType)
+                    {
+                        case TestType.Type.WordByTranslations:
+                            if (Answer == _currentWord.Text)
+                                isRightAnswer = true;
+                            else
+                                Answer = _currentWord.Text;
+                            break;
+                        case TestType.Type.TranslationsByWord:
+                            if (_currentWord.Translation.Any(x => x == Answer))
+                                isRightAnswer = true;
+                            else
+                                Answer = _currentWord.Translation.FirstOrDefault();
+                            break;
+                        case TestType.Type.WordByExamples:
+                            if (Answer == _currentWord.Text)
+                                isRightAnswer = true;
+                            else
+                                Answer = _currentWord.Text;
+                            break;
+                    }
+
+                    if (isRightAnswer)
+                    {
+                        ResultBorderValue = "Blue";
+                        ResultImageUri = "../../Icons/done_icon.png";
+                    }
+                    else
+                    {
+                        ResultBorderValue = "Red";
+                        ResultImageUri = "../../Icons/wrong_icon.png";
+                    }
+
+                    bool isProgressEnd = false;
+
+                    await Task.Run(() =>
+                    {
+                        for (int i = 0; i <= 100; i++)
+                        {
+                            ProgressBarValue = i;
+                            Thread.Sleep(25);
+                        }
+
+                        ProgressBarValue = 0;
+                        isProgressEnd = true;
+                    });
+
+                    if (isProgressEnd)
+                    {
+                        _wordIndex++;
+
+                        if (_words.ElementAtOrDefault(_wordIndex) != null)
+                            _currentWord = _words[_wordIndex];
+                        else
+                        {
+                            //TO DO
+                        }
+
+                        SetTestFields();
+
+                        ResultBorderValue = "Black";
+                        ResultImageUri = String.Empty;
+                    }
                 });
             }
         }

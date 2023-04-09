@@ -101,7 +101,7 @@
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel IsItemsHost="True" Orientation="Horizontal" 
-                                       Width="1100"/>
+                                           Width="1100"/>
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                     </ListBox>
@@ -119,7 +119,7 @@
                              FontFamily="Oswald Light" FontSize="20"
                              HorizontalAlignment="Center" TextWrapping="Wrap"
                              Width="1150" Height="150"
-                             Text="{Binding ExamplesTraslation, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding ExamplesTranslation, UpdateSourceTrigger=PropertyChanged}"
                              Style="{StaticResource MaterialDesignFilledTextBox}"/>
                 </StackPanel>
             </StackPanel>

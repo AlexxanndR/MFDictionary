@@ -24,16 +24,5 @@ namespace MFDictionary.Helpers
                 ExamplesTranslation = yandexDictionary.def.First().tr.Where(x => x.ex != null).SelectMany(y => y.ex.SelectMany(z => z.tr.Select(i => i.text))).ToList(),
             };
         }
-
-/*        public static TestWord GetTestWord(this Word word)
-        {
-            return new TestWord
-            {
-                Text = word.Text,
-                GivenTranslation = null,
-                Translation = word.Translation,
-                ResultColor = "Black"
-            };
-        }*/
     }
 }

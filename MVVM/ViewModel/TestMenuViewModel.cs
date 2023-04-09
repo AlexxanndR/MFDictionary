@@ -1,12 +1,8 @@
-﻿using Avalonia.Animation;
-using BespokeFusion;
+﻿using BespokeFusion;
 using MFDictionary.Core;
 using MFDictionary.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
@@ -14,35 +10,35 @@ namespace MFDictionary.MVVM.ViewModel
 {
     internal class TestMenuViewModel : ObservableObject
     {
-        private int _maxWordsNum;
+        private int _testWordsNum;
 
-        public int MaxWordsNum
+        public int TestWordsNum
         {
-            get { return _maxWordsNum; }
+            get { return _testWordsNum; }
             set
             {
-                _maxWordsNum = value;
+                _testWordsNum = value;
                 OnPropertyChanged();
             }
         }
 
         public List<string> TestTypes { get; private set; }
 
-        private string _testType;
+        private string _selectedTestType;
 
-        public string TestType
+        public string SelectedTestType
         {
-            get { return _testType; }
+            get { return _selectedTestType; }
             set
             {
-                _testType = value;
+                _selectedTestType = value;
                 OnPropertyChanged();
             }
         }
 
         public TestMenuViewModel() 
         {
-            TestTypes = ApplicationContext.TestTypes;
+            TestTypes = TestType.TypesInStrings;
         }
 
         private void ShowMessageBox(string message)
@@ -72,21 +68,21 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 return new RelayCommand((obj) =>
                 {
-                    ApplicationContext.TestWordsNum = MaxWordsNum;
+                    ApplicationContext.TestWordsNum = TestWordsNum;
 
-                    if (MaxWordsNum <= 0)
+                    if (TestWordsNum <= 0)
                     {
                         ShowMessageBox("Incorrect words number!");
                         return;
                     }
 
-                    if (String.IsNullOrWhiteSpace(TestType))
+                    if (String.IsNullOrWhiteSpace(SelectedTestType))
                     {
                         ShowMessageBox("No test type selected!");
                         return;
                     }
 
-                    ApplicationContext.SelectedTestType = TestType;
+                    ApplicationContext.SelectedTestType = TestType.StringToTypeRatio[SelectedTestType];
 
                     foreach (Window window in Application.Current.Windows)
                         if (window.GetType() == typeof(MainWindow))
