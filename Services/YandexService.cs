@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MFDictionary.Core
@@ -30,7 +31,9 @@ namespace MFDictionary.Core
                 request.Method = HttpMethod.Get;
                 request.RequestUri = new Uri(endpoint + route);
 
-                HttpResponseMessage response = await client.SendAsync(request).ConfigureAwait(false);
+                var cts = new CancellationTokenSource(500);
+                HttpResponseMessage response = await client.SendAsync(request, cts.Token).ConfigureAwait(false);
+
                 result = await response.Content.ReadAsStringAsync();
             }
 

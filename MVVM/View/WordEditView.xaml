@@ -122,7 +122,8 @@
                              HorizontalAlignment="Center" TextWrapping="Wrap"
                              Width="1150" Height="150"
                              Text="{Binding Examples, UpdateSourceTrigger=PropertyChanged}"
-                             Style="{StaticResource MaterialDesignFilledTextBox}"/>
+                             Style="{StaticResource MaterialDesignFilledTextBox}">
+                    </TextBox>
                     <TextBox mde:HintAssist.Hint="Examples translation" AcceptsReturn="true"
                              FontFamily="Oswald Light" FontSize="20"
                              HorizontalAlignment="Center" TextWrapping="Wrap"

@@ -74,6 +74,7 @@
         </Grid>
 
         <ProgressBar Grid.Row="2"
+                     Background="AliceBlue" Foreground="{StaticResource DarkGreen}"
                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                      Value="{Binding ProgressBarValue}" 
                      Style="{StaticResource MaterialDesignLinearProgressBar}"/>

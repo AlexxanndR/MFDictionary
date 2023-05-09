@@ -35,8 +35,8 @@
                 HorizontalAlignment="Right" VerticalAlignment="Bottom" 
                 Background="{StaticResource MiddleGreen}"
                 Style="{StaticResource RectangleButtonStyle}"
-                PreviewMouseDown="AddButton_PreviewMouseDown"
-                PreviewMouseUp="AddButton_PreviewMouseUp"
+                PreviewMouseRightButtonDown="AddButton_PreviewMouseRightButtonDown"
+                PreviewMouseRightButtonUp="AddButton_PreviewMouseRightButtonUp"
                 PreviewMouseMove="AddButton_PreviewMouseMove">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">
@@ -44,7 +44,6 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </Button>
-
 
     </Grid>
 </UserControl>

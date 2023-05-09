@@ -94,7 +94,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Grid>
-                        <Rectangle Fill="{TemplateBinding Background}" Stroke="Black"
+                        <Rectangle Fill="{TemplateBinding Background}" Stroke="Gray"
                                    RadiusY="5" RadiusX="5"/>
                         <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                           RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>

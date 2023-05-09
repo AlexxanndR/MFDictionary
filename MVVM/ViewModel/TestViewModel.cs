@@ -144,11 +144,11 @@ namespace MFDictionary.MVVM.ViewModel
             {
                 case TestType.Type.WordByTranslations:
                     Translations = _currentWord.Translation;
-                    Examples = _currentWord.Examples;
+                    Examples = _currentWord.ExamplesTranslation;
                     break;
                 case TestType.Type.TranslationsByWord:
                     Text = _currentWord.Text;
-                    Examples = _currentWord.ExamplesTranslation;
+                    Examples = _currentWord.Examples;
                     break;
                 case TestType.Type.WordByExamples:
                     Examples = Parser.ParseExamplesForTest(_currentWord.Examples, _currentWord.Text);
@@ -204,19 +204,19 @@ namespace MFDictionary.MVVM.ViewModel
                     switch (ApplicationContext.SelectedTestType)
                     {
                         case TestType.Type.WordByTranslations:
-                            if (Answer == _currentWord.Text)
+                            if (Answer.ToLower() == _currentWord.Text.ToLower())
                                 isRightAnswer = true;
                             else
                                 Answer = _currentWord.Text;
                             break;
                         case TestType.Type.TranslationsByWord:
-                            if (_currentWord.Translation.Any(x => x == Answer))
+                            if (_currentWord.Translation.Any(x => x.ToLower() == Answer.ToLower()))
                                 isRightAnswer = true;
                             else
                                 Answer = _currentWord.Translation.FirstOrDefault();
                             break;
                         case TestType.Type.WordByExamples:
-                            if (Answer == _currentWord.Text)
+                            if (Answer.ToLower() == _currentWord.Text.ToLower())
                                 isRightAnswer = true;
                             else
                                 Answer = _currentWord.Text;

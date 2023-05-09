@@ -15,7 +15,8 @@
                 <ResourceDictionary Source="/Templates/ButtonStyle.xaml"/>
                 <ResourceDictionary Source="/Templates/TextBoxStyle.xaml"/>
                 <ResourceDictionary Source="/Templates/ValidationTemplate.xaml"/>
-                
+
+               
                 <ResourceDictionary>
                     <SolidColorBrush x:Key="LightGreen" Color="#C8FFED"/>
                     <SolidColorBrush x:Key="MiddleGreen" Color="#8AFFD9"/>

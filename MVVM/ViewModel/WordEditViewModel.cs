@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -188,61 +189,49 @@ namespace MFDictionary.MVVM.ViewModel
         }
         private async Task Init()
         {
-            var langs = await _yandexService.GetLangsAsync();
-
-            await Task.Run(() =>
+            try
             {
-                try
-                {
-                    foreach (var lang in langs)
-                    {
-                        var from = _langsShortForm[lang.Split('-')[0]];
-                        var to = _langsShortForm[lang.Split('-')[1]];
+                var langs = await _yandexService.GetLangsAsync();
 
-                        if (_langsRatio.ContainsKey(from) == true)
-                            _langsRatio[from].Add(to);
-                        else
-                        {
-                            LangsFrom.Add(from);
-                            _langsRatio.Add(from, new List<string> { to });
-                        }
-                    }
-                } 
-                catch (Exception ex) 
+                foreach (var lang in langs)
                 {
-                    //TO DO
+                    var from = _langsShortForm[lang.Split('-')[0]];
+                    var to = _langsShortForm[lang.Split('-')[1]];
+
+                    if (_langsRatio.ContainsKey(from) == true)
+                        _langsRatio[from].Add(to);
+                    else
+                    {
+                        LangsFrom.Add(from);
+                        _langsRatio.Add(from, new List<string> { to });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!(ex.InnerException is InvalidOperationException))
+                    CustomMessageBox.ShowWarning("No internet connection!");
+            }
+
+            await Task.Run(async () =>
+            {
+                if (ApplicationContext.SelectedId >= 0)
+                {
+                    Word word = await _wordsDboAdapter.GetByIdAsync(ApplicationContext.SelectedId);
+                    TranslatableWord = word.Text;
+                    Transcription = word?.Transcription;
+                    Translations = new ObservableCollection<string>(word.Translation);
+                    Examples = word.Examples.Count != 0 ? String.Join("\n", word.Examples) : String.Empty;
+                    ExamplesTranslation = word.ExamplesTranslation.Count != 0 ? String.Join("\n", word.ExamplesTranslation) : String.Empty;
                 }
             });
-
-            if (ApplicationContext.SelectedId >= 0)
-            {
-                Word word = await _wordsDboAdapter.GetByIdAsync(ApplicationContext.SelectedId);
-                TranslatableWord = word.Text;
-                Transcription = word?.Transcription;
-                Translations = new ObservableCollection<string>(word.Translation);
-                Examples = word.Examples.Count != 0 ? String.Join("\n", word.Examples) : String.Empty;
-                ExamplesTranslation = word.ExamplesTranslation.Count != 0 ? String.Join("\n", word.ExamplesTranslation) : String.Empty;
-            }
         }
 
         public RelayCommand WindowLoadedCommand
         {
             get
             {
-                return new RelayCommand(async (parameter) =>
-                {
-                    try
-                    {
-                        await Init();
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ex.InnerException is HttpRequestException)
-                        {
-                            CustomMessageBox.ShowWarning("No int`ernet connection!");
-                        }
-                    }
-                });
+                return new RelayCommand(async (parameter) => await Init() );
             }
         }
 
